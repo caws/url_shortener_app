@@ -21,6 +21,8 @@ class UrlBloc {
   final _urls = BehaviorSubject<List<Url>>(seedValue: []);
   final _url = BehaviorSubject<Url>();
   final _urlsCount = BehaviorSubject<int>(seedValue: 0);
+  final _error = BehaviorSubject<Exception>();
+  bool errorPresent = false;
 
   UrlBloc(this._urlService);
 
@@ -28,15 +30,28 @@ class UrlBloc {
   /// of the cart when you need all the information in [CartItem].
   ValueObservable<List<Url>> get urls => _urls.stream;
 
+  ValueObservable<Exception> get error => _error.stream;
+
   Future getUrls() async {
-    final ids = await _urlService.requestAll();
-    _urls.sink.add(ids);
-    _urlsCount.sink.add(ids.length);
+    try {
+      final urls = await _urlService.requestAll();
+      _urls.sink.add(urls);
+      _urlsCount.sink.add(urls.length);
+    } catch (e) {
+      _error.sink.add(e);
+    }
   }
 
+  // Tries to get data, if something
+  // unexpected happens, add exception
+  // to the sink.
   Future getUrl(int urlId) async {
-    final url = await _urlService.requestById(urlId);
-    _url.sink.add(url);
+    try {
+      final url = await _urlService.requestById(urlId);
+      _url.sink.add(url);
+    } catch (e) {
+      _error.sink.add(e);
+    }
   }
 
   ValueObservable<int> get urlsCount => _urlsCount.stream;
@@ -46,5 +61,6 @@ class UrlBloc {
     _url.close();
     _urls.close();
     _urlsCount.close();
+    _error.close();
   }
 }
