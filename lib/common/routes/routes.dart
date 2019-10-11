@@ -8,27 +8,4 @@ class Routes {
   }
 }
 
-class UrlRoutes extends Routes {
-  static const urlsNameSpace = "/urls";
 
-  static index() {
-    return Routes.buildRoute(urlsNameSpace);
-  }
-
-  static show(int id) {
-    return Routes.buildRoute("$urlsNameSpace/$id");
-  }
-}
-
-class AuthenticationRoutes extends Routes {
-  static const authenticationLogin = "/login";
-  static const authenticationSignup = "/signup";
-
-  static login() {
-    return Routes.buildRoute(authenticationLogin);
-  }
-
-  static signup() {
-    return Routes.buildRoute(authenticationSignup);
-  }
-}

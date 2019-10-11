@@ -1,17 +1,20 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:shortener_app/common/models/url.dart';
+import 'package:shortener_app/common/routes/sub_routes/url_routes.dart';
+import 'package:shortener_app/common/utils/http_tunnel.dart';
 
 /// This class consumes the Url Shortener API
 class UrlService {
+  // Instantiate our wrapper class for HTTP requests
+  HttpTunnel httpTunnel = HttpTunnel();
+
   /// Fetches a single url a database. The [urlId]
   /// parameter is used to build the request.
-  Future<Url> requestById(int urlId) async {
+  Future<Url> requestById(int id) async {
     // Simulate network delay.
-    await Future.delayed(Duration(milliseconds: 200));
+    final response = await httpTunnel.get(UrlRoutes.show(id));
 
     // Create a single Url object
     return _buildRandomUrl();
@@ -19,16 +22,11 @@ class UrlService {
 
   /// Fetches a many urls from the database.
   Future<List<Url>> requestAll() async {
-    // Simulate network delay.
-    await Future.delayed(Duration(milliseconds: 200));
+// Simulate network delay.
+    final response = await httpTunnel.get(UrlRoutes.index());
 
-    List<Url> urls = List<Url>();
-    urls.add(_buildRandomUrl());
-    urls.add(_buildRandomUrl());
-    urls.add(_buildRandomUrl());
-    urls.add(_buildRandomUrl());
-
-    return urls;
+    // Create a single Url object
+    return null;
   }
 
   // Used for demonstration purposes, won't be in the final versino
