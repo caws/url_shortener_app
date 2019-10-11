@@ -17,25 +17,32 @@ class UrlService {
     final response = await httpTunnel.get(UrlRoutes.show(id));
 
     // Create a single Url object
-    return _buildRandomUrl();
+    return Url.fromJson(response.data);
   }
 
   /// Fetches a many urls from the database.
   Future<List<Url>> requestAll() async {
 // Simulate network delay.
+    httpTunnel.setAuthorizationToken('aaa');
     final response = await httpTunnel.get(UrlRoutes.index());
 
+    List<Url> urls = List();
+    urls.add(_buildRandomUrl());
+    urls.add(_buildRandomUrl());
+    urls.add(_buildRandomUrl());
+    urls.add(_buildRandomUrl());
+
     // Create a single Url object
-    return null;
+    return urls;
   }
 
   // Used for demonstration purposes, won't be in the final versino
   Url _buildRandomUrl() {
     final random = Random();
 
-    final id = random.nextInt(0xffff);
-    final shortUrl = 'https://${random.nextInt(50)}.com';
-    final fullUrl = 'https://${random.nextInt(50)}.com';
+    final id = 1;
+    final shortUrl = 'https://${1}.com';
+    final fullUrl = 'https://${1}.com';
     final pageTitle = 'Google';
     final hitCounter = 50;
     final status = 'Up';

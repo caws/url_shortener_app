@@ -32,8 +32,8 @@ class HttpTunnel<T> {
 
   void setAuthorizationToken(String token) {
     Map<String, dynamic> headers = new Map();
-//    headers["Authorization"] = "Bearer " +
-//        'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1NzA3NDI3ODl9.uvUEkEvIgyasukHTXbKtKcQKffcAXyH1uuvn-yyfWsk';
+    headers["Authorization"] = "Bearer " +
+        'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1NzA4NDMwOTZ9.QRvFvs1xUqK-NXzT5esO2auvU9Dchd4SclAf-ZIGdP0';
 //    headers["Locale"] = "pt-BR";
 
     this.options.headers = headers;

@@ -15,4 +15,13 @@ class Url {
       this.hitCounter,
       this.status,
       this.createdAt});
+
+  Url.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        shortUrl = json["short_url"],
+        fullUrl = json["full_url"],
+        pageTitle = json["page_title"],
+        hitCounter = json["hit_counter"],
+        status = json["status"],
+        createdAt = json["created_at"];
 }
