@@ -4,14 +4,41 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/authentication.dart';
 import 'package:shortener_app/src/dashboard/dashboard_bloc_page.dart';
-import 'package:shortener_app/src/dashboard/dashboard_provider.dart';
 import 'package:shortener_app/src/login/login_provider.dart';
 
-class LoginBlocPage extends StatelessWidget {
+class LoginBlocPage extends StatefulWidget {
   static const routeName = "/";
 
-  Widget onSuccess(BuildContext context, Authentication authentication) {
-    return Text("aoaa");
+  @override
+  LoginBlocPageState createState() => LoginBlocPageState();
+}
+
+class LoginBlocPageState extends State<LoginBlocPage> {
+  bool isLoading = false;
+  String errorMessage = '';
+
+  void _loading() {
+    setState(() {
+      isLoading = true;
+    });
+  }
+
+  void _notLoading() {
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  void _setErrors(Exception e) {
+    if (e != null) {
+      setState(() {
+        errorMessage = e.toString();
+      });
+    } else {
+      setState(() {
+        errorMessage = '';
+      });
+    }
   }
 
   @override
@@ -55,7 +82,18 @@ class LoginBlocPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
+          _loading();
+
           loginProvider.doLogin(email.initialValue, password.initialValue);
+
+          loginProvider.login.listen((data) {
+            _setErrors(null);
+            _notLoading();
+            Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
+          }, onError: (error) {
+            _setErrors(error);
+            _notLoading();
+          });
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
@@ -71,6 +109,31 @@ class LoginBlocPage extends StatelessWidget {
       onPressed: () {},
     );
 
+    Widget _loadingSpinner() {
+      if (isLoading) {
+        return Column(
+          children: <Widget>[
+            CircularProgressIndicator(
+              backgroundColor: Colors.cyan,
+            ),
+            Text("Loading...")
+          ],
+        );
+      }
+
+      return SizedBox();
+    }
+
+    Widget _errorMessage() {
+      if (errorMessage.length > 0) {
+        return Center(
+          child: Text(errorMessage)
+        );
+      }
+
+      return SizedBox();
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -80,6 +143,8 @@ class LoginBlocPage extends StatelessWidget {
           children: <Widget>[
             logo,
             SizedBox(height: 48.0),
+            _loadingSpinner(),
+            _errorMessage(),
             SizedBox(height: 8.0),
             email,
             SizedBox(height: 8.0),
