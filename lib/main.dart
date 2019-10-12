@@ -1,37 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:shortener_app/common/services/login.dart';
 import 'package:shortener_app/common/services/url.dart';
 import 'package:shortener_app/common/theme/theme.dart';
+import 'package:shortener_app/src/dashboard/dashboard_bloc.dart';
+import 'package:shortener_app/src/dashboard/dashboard_bloc_page.dart';
+import 'package:shortener_app/src/dashboard/dashboard_provider.dart';
+import 'package:shortener_app/src/login/login_bloc.dart';
+import 'package:shortener_app/src/login/login_bloc_page.dart';
+import 'package:shortener_app/src/login/login_provider.dart';
 import 'package:shortener_app/src/url/url_bloc.dart';
 import 'package:shortener_app/src/url/url_bloc_page.dart';
 import 'package:shortener_app/src/url/url_provider.dart';
 
+import 'common/services/dashboard.dart';
+
 void main() {
   // Initiate services.
   final urlService = UrlService();
+  final dashboardService = DashboardService();
+  final loginService = LoginService();
 
   // Build top-level components.
   // In a real world app, this would also rope in HTTP clients and such.
   final urlBloc = UrlBloc(urlService);
+  final dashboardBloc = DashboardBloc(dashboardService);
+  final loginBloc = LoginBloc(loginService);
 
   // Start the app.
-  runApp(MyApp(urlBloc));
+  runApp(MyApp(urlBloc, dashboardBloc, loginBloc));
 }
 
 class MyApp extends StatelessWidget {
   final UrlBloc urlBloc;
+  final DashboardBloc dashboardBloc;
+  final LoginBloc loginBloc;
 
-  MyApp(this.urlBloc);
+  MyApp(this.urlBloc, this.dashboardBloc, this.loginBloc);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return UrlProvider(
-      urlBloc: urlBloc,
-      child: MaterialApp(
-        title: 'Url Shortener',
-        theme: appTheme,
-        home: UrlBlocPage(),
-      ),
+    return MaterialApp(
+      title: 'Url Shortener',
+      theme: appTheme,
+      routes: <String, WidgetBuilder>{
+        LoginBlocPage.routeName: (context) => LoginProvider(
+              loginBloc: loginBloc,
+              child: LoginBlocPage(),
+            ),
+        UrlBlocPage.routeName: (context) => UrlProvider(
+              urlBloc: urlBloc,
+              child: UrlBlocPage(),
+            ),
+        DashboardBlocPage.routeName: (context) => DashboardProvider(
+              dashboardBloc: dashboardBloc,
+              child: DashboardBlocPage(),
+            ),
+      },
     );
   }
 }

@@ -16,6 +16,14 @@ class Url {
       this.status,
       this.createdAt});
 
+  static List<Url> fromJsonArray(List<dynamic> jsonArray) {
+    List<Url> urls = jsonArray.map((itemJson) {
+      Url.fromJson(itemJson);
+    }).toList();
+
+    return urls;
+  }
+
   Url.fromJson(Map<String, dynamic> json)
       : id = json["id"],
         shortUrl = json["short_url"],
