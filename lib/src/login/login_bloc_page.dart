@@ -1,13 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shortener_app/common/models/authentication.dart';
 import 'package:shortener_app/src/dashboard/dashboard_bloc_page.dart';
 import 'package:shortener_app/src/login/login_provider.dart';
+import 'package:shortener_app/src/session/session_provider.dart';
 
 class LoginBlocPage extends StatefulWidget {
-  static const routeName = "/";
+  static const routeName = "/login";
 
   @override
   LoginBlocPageState createState() => LoginBlocPageState();
@@ -89,6 +87,8 @@ class LoginBlocPageState extends State<LoginBlocPage> {
           loginProvider.login.listen((data) {
             _setErrors(null);
             _notLoading();
+            final sessionProvider = SessionProvider.of(context);
+            sessionProvider.setToken(data.token);
             Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
           }, onError: (error) {
             _setErrors(error);
