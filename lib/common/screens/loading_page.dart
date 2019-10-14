@@ -14,22 +14,6 @@ class LoadingPage extends StatefulWidget {
 class LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
-    final sessionProvider = SessionProvider.of(context);
-
-    // Verify if store token is valid
-    sessionProvider.isTokenValid();
-    sessionProvider.isValid.listen((tokenValidOrNot) {
-      // If it is valid, send user to the Dashboard page,
-      // otherwise they'll have to login again.
-      if (tokenValidOrNot) {
-        Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
-      } else {
-        Navigator.pushReplacementNamed(context, LoginBlocPage.routeName);
-      }
-    }, onError: (error) {
-      Navigator.pushReplacementNamed(context, LoginBlocPage.routeName);
-    });
-
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(

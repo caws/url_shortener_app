@@ -51,12 +51,51 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    sessionBloc.isTokenValid();
+
+    Widget _loginPage() {
+      return LoginProvider(
+        loginBloc: loginBloc,
+        child: LoginBlocPage(),
+      );
+    }
+
+    Widget _dashboardPage() {
+      return DashboardProvider(
+        dashboardBloc: dashboardBloc,
+        child: DashboardBlocPage(),
+      );
+    }
+
     return SessionProvider(
       sessionBloc: sessionBloc,
       child: MaterialApp(
         title: 'Url Shortener',
         theme: appTheme,
-        home: LoadingPage(),
+        home: StreamBuilder<bool>(
+            stream: sessionBloc.isValid,
+            builder: (context, snapshot) {
+              // If there's an error, user is redirected to the LoginPage
+              if (snapshot.hasError) {
+                return _loginPage();
+              }
+
+              // If data is null and no errors are present, this
+              // means that we're waiting for something to happen.
+              if (snapshot.data == null) {
+                return LoadingPage();
+              }
+
+              // If the data returned is true, it means that the
+              // session is valid (token is present)
+              if (snapshot.data) {
+                return _dashboardPage();
+              }
+
+              // Otherwise we'll just send the user to the login
+              // screen because their token is invalid/expired.
+              return _loginPage(); // unreachable
+            }),
         routes: <String, WidgetBuilder>{
           LoginBlocPage.routeName: (context) => LoginProvider(
                 loginBloc: loginBloc,

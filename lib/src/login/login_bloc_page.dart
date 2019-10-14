@@ -85,8 +85,6 @@ class LoginBlocPageState extends State<LoginBlocPage> {
           await loginProvider.doLogin(email.initialValue, password.initialValue);
 
           loginProvider.login.listen((data) {
-            _setErrors(null);
-            _notLoading();
             final sessionProvider = SessionProvider.of(context);
             sessionProvider.setSessionData(data);
             Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
