@@ -9,13 +9,13 @@ class SessionBloc {
 
   // These are the internal objects whose streams / sinks are provided
   // by this component. See below for what each means.
-  final _sessionToken = BehaviorSubject<String>();
+  final _sessionData = BehaviorSubject<Authentication>();
   final _isLogged = BehaviorSubject<bool>();
   final _isValid = BehaviorSubject<bool>();
 
   SessionBloc(this._sessionService);
 
-  ValueObservable<String> get sessionToken => _sessionToken.stream;
+  ValueObservable<Authentication> get sessionData => _sessionData.stream;
   ValueObservable<bool> get isLogged => _isLogged.stream;
   ValueObservable<bool> get isValid => _isValid.stream;
 
@@ -28,7 +28,7 @@ class SessionBloc {
       _isLogged.addError(e);
     }
   }
-  
+
   isTokenValid() async {
     try {
       // Call the
@@ -38,30 +38,30 @@ class SessionBloc {
       _isLogged.addError(e);
     }
   }
-  
-  getToken() async {
+
+  getSessionData() async {
     try {
       // Call the
-      final token = await _sessionService.getToken();
-      _sessionToken.sink.add(token);
+      final token = await _sessionService.getSessionData();
+      _sessionData.sink.add(token);
     } catch (e) {
-      _sessionToken.addError(e);
+      _sessionData.addError(e);
     }
   }
 
-  setToken(String token) async {
+  setSessionData(Authentication sessionData) async {
     try {
       // Call the
-      final result = _sessionService.storeToken(token);
+      final result = _sessionService.storeSessionData(sessionData);
     } catch (e) {
-      _sessionToken.addError(e);
+      _sessionData.addError(e);
     }
   }
 
 
   /// Take care of closing streams.
   void dispose() {
-    _sessionToken.close();
+    _sessionData.close();
     _isLogged.close();
     _isValid.close();
   }

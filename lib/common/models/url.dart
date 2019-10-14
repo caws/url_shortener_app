@@ -17,9 +17,11 @@ class Url {
       this.createdAt});
 
   static List<Url> fromJsonArray(List<dynamic> jsonArray) {
-    List<Url> urls = jsonArray.map((itemJson) {
-      Url.fromJson(itemJson);
-    }).toList();
+    List<Url> urls =  List<Url>();
+
+    jsonArray.forEach((itemJson) {
+      urls.add(Url.fromJson(itemJson));
+    });
 
     return urls;
   }

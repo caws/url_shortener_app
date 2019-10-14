@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shortener_app/src/dashboard/dashboard_bloc_page.dart';
 import 'package:shortener_app/src/login/login_bloc_page.dart';
-import 'package:shortener_app/src/login/login_provider.dart';
 import 'package:shortener_app/src/session/session_provider.dart';
 
 class LoadingPage extends StatefulWidget {
@@ -13,27 +12,12 @@ class LoadingPage extends StatefulWidget {
 }
 
 class LoadingPageState extends State<LoadingPage> {
-  bool isLoading = true;
-
-  void _loading() {
-    setState(() {
-      isLoading = true;
-    });
-  }
-
-  void _notLoading() {
-    setState(() {
-      isLoading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final sessionProvider = SessionProvider.of(context);
 
     // Verify if store token is valid
     sessionProvider.isTokenValid();
-
     sessionProvider.isValid.listen((tokenValidOrNot) {
       // If it is valid, send user to the Dashboard page,
       // otherwise they'll have to login again.
@@ -54,7 +38,6 @@ class LoadingPageState extends State<LoadingPage> {
     );
 
     Widget _loadingSpinner() {
-      if (isLoading) {
         return Column(
           children: <Widget>[
             CircularProgressIndicator(
@@ -63,9 +46,6 @@ class LoadingPageState extends State<LoadingPage> {
             Text("Loading...")
           ],
         );
-      }
-
-      return SizedBox();
     }
 
     return Scaffold(

@@ -4,6 +4,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:shortener_app/common/models/dashboard.dart';
 import 'package:shortener_app/common/models/url.dart';
 import 'package:shortener_app/common/services/dashboard.dart';
+import 'package:shortener_app/common/services/session.dart';
 import 'package:shortener_app/common/services/url.dart';
 
 /// This component encapsulates the logic of fetching products from

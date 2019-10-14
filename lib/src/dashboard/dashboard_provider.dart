@@ -11,7 +11,8 @@ class DashboardProvider extends InheritedWidget {
     Key key,
     DashboardBloc dashboardBloc,
     Widget child,
-  })  : dashboardBloc = dashboardBloc ?? DashboardBloc(dashboardService),
+  })  : dashboardBloc =
+            dashboardBloc ?? DashboardBloc(dashboardService),
         super(key: key, child: child);
 
   @override

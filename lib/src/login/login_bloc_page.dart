@@ -88,7 +88,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
             _setErrors(null);
             _notLoading();
             final sessionProvider = SessionProvider.of(context);
-            sessionProvider.setToken(data.token);
+            sessionProvider.setSessionData(data);
             Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
           }, onError: (error) {
             _setErrors(error);

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/dashboard.dart';
 import 'package:shortener_app/src/dashboard/dashboard_provider.dart';
-import 'package:shortener_app/src/url/url_provider.dart';
 
 // This class holds the View
 class DashboardBlocPage extends StatelessWidget {
@@ -9,8 +8,40 @@ class DashboardBlocPage extends StatelessWidget {
 
   static const routeName = "/dashboard";
 
-  Widget onSuccess(BuildContext context, Dashboard dashboard) {
-    return Text(dashboard.totalHits.toString());
+  Widget _buildUrls(BuildContext context, Dashboard dashboard) {
+    final urls = dashboard.recentUrls;
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Text("Total: ${dashboard.totalHits}"),
+          Container(
+            child: ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              itemCount: urls == null ? 0 : urls.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    elevation: 3.0,
+                    child: ListTile(
+                      subtitle: Text('Short: ' + urls[index].shortUrl),
+                      title: Text(urls[index].fullUrl),
+                      leading:
+                          Text('Hits:' + urls[index].hitCounter.toString()),
+                      trailing: IconButton(
+                        icon: Icon(Icons.content_copy),
+                        onPressed: () {
+                          print('sugoiioii');
+                        },
+                      ),
+                    ));
+              },
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   @override
@@ -21,25 +52,31 @@ class DashboardBlocPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Dashboard"),
+        actions: <Widget>[
+          IconButton(
+              onPressed: () {
+                print('sugoi');
+              },
+              icon: Stack(
+                overflow: Overflow.visible,
+                children: [
+                  Icon(Icons.add),
+                ],
+              )),
+        ],
       ),
       body: StreamBuilder<Dashboard>(
           stream: dashboardProvider.dashboard,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Text("NANI");
+              return Text(snapshot.error.toString());
             }
 
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-                return Text('No connection');
-              case ConnectionState.waiting:
-                return Text("Loading");
-              case ConnectionState.active:
-                return onSuccess(context, snapshot.data);
-              case ConnectionState.done:
-                return Text('Connection closed');
+            if (snapshot.data == null) {
+              return Text('No data');
             }
-            return null; // unreachable
+
+            return _buildUrls(context, snapshot.data);
           }),
     );
   }
