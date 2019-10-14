@@ -10,4 +10,8 @@ class UrlRoutes extends Routes {
   static show(int id) {
     return Routes.buildRoute("$urlsNameSpace/$id");
   }
+
+  static destroy(int id) {
+    return Routes.buildRoute("$urlsNameSpace/$id");
+  }
 }

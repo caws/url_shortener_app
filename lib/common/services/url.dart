@@ -29,4 +29,15 @@ class UrlService {
     // Create a single Url object
     return Url.fromJsonArray(response.data);
   }
+
+  Future<Url> save(Url url) async {
+    final response = await _httpTunnel.post(UrlRoutes.index(), url.toJson());
+
+    // Create a single Url object
+    return Url.fromJson(response.data);
+  }
+
+  void delete(Url deadUrl) async {
+    await _httpTunnel.delete(UrlRoutes.destroy(deadUrl.id), null);
+  }
 }

@@ -15,6 +15,8 @@ import 'package:shortener_app/src/session/session_provider.dart';
 import 'package:shortener_app/src/url/url_bloc.dart';
 import 'package:shortener_app/src/url/url_bloc_page.dart';
 import 'package:shortener_app/src/url/url_provider.dart';
+import 'package:shortener_app/src/url/widget/new_url_page.dart';
+import 'package:shortener_app/src/url/widget/url_page.dart';
 
 import 'common/screens/loading_page.dart';
 import 'common/services/dashboard.dart';
@@ -104,6 +106,10 @@ class MyApp extends StatelessWidget {
           UrlBlocPage.routeName: (context) => UrlProvider(
                 urlBloc: urlBloc,
                 child: UrlBlocPage(),
+              ),
+          NewUrlPage.routeName: (context) => UrlProvider(
+                urlBloc: urlBloc,
+                child: NewUrlPage(),
               ),
           DashboardBlocPage.routeName: (context) => DashboardProvider(
                 dashboardBloc: dashboardBloc,

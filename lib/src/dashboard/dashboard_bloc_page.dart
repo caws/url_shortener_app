@@ -4,48 +4,15 @@ import 'package:shortener_app/common/models/dashboard.dart';
 import 'package:shortener_app/src/dashboard/dashboard_provider.dart';
 import 'package:shortener_app/src/login/login_bloc_page.dart';
 import 'package:shortener_app/src/session/session_provider.dart';
+import 'package:shortener_app/src/url/url_bloc_page.dart';
+import 'package:shortener_app/src/url/widget/new_url_page.dart';
+import 'package:shortener_app/src/url/widget/url_page.dart';
 
 // This class holds the View
 class DashboardBlocPage extends StatelessWidget {
   DashboardBlocPage();
 
   static const routeName = "/dashboard";
-
-  Widget _buildUrls(BuildContext context, Dashboard dashboard) {
-    final urls = dashboard.recentUrls;
-    return Center(
-      child: Column(
-        children: <Widget>[
-          Text("Total: ${dashboard.totalHits}"),
-          Container(
-            child: ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: urls == null ? 0 : urls.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    elevation: 3.0,
-                    child: ListTile(
-                      subtitle: Text('Short: ' + urls[index].shortUrl),
-                      title: Text(urls[index].fullUrl),
-                      leading:
-                          Text('Hits:' + urls[index].hitCounter.toString()),
-                      trailing: IconButton(
-                        icon: Icon(Icons.content_copy),
-                        onPressed: () {
-                          print('sugoiioii');
-                        },
-                      ),
-                    ));
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +64,20 @@ class DashboardBlocPage extends StatelessWidget {
                             ),
                             color: Theme.of(context).accentColor,
                             onPressed: () {
+                              Navigator.pushNamed(
+                                  context, UrlBlocPage.routeName);
+                            },
+                          ),
+                          SizedBox(width: 10),
+                          FlatButton(
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            color: Colors.cyan,
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(
+                                  context, NewUrlPage.routeName);
                             },
                           ),
                           SizedBox(width: 10),
@@ -107,10 +88,12 @@ class DashboardBlocPage extends StatelessWidget {
                             ),
                             color: Colors.red,
                             onPressed: () {
-                              final sessionProvider = SessionProvider.of(context);
+                              final sessionProvider =
+                                  SessionProvider.of(context);
                               sessionProvider.discardSessionData();
 
-                              Navigator.pushReplacementNamed(context, LoginBlocPage.routeName);
+                              Navigator.pushReplacementNamed(
+                                  context, LoginBlocPage.routeName);
                             },
                           ),
                         ],
@@ -181,7 +164,14 @@ class DashboardBlocPage extends StatelessWidget {
                             child: Container(
                               child: GestureDetector(
                                 onTap: () {
-                                  print("Pression");
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            UrlPage(
+                                                url: snapshot
+                                                    .data.recentUrls[index])),
+                                  );
                                 },
                                 child: Card(
                                   elevation: 3.0,
@@ -190,21 +180,30 @@ class DashboardBlocPage extends StatelessWidget {
                                     child: Column(
                                       children: <Widget>[
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
                                           children: <Widget>[
                                             IconButton(
                                               icon: Icon(
-                                                Icons.delete,
-                                                color: Colors.red,
+                                                Icons.search,
+                                                color: Colors.blueAccent,
                                               ),
                                               iconSize: 20.0,
-                                              color: Colors.red,
-                                              onPressed: () {},
+                                              color: Colors.blueAccent,
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext context) =>
+                                                          UrlPage(url: snapshot.data.recentUrls[index],)),
+                                                );
+                                              },
                                             ),
                                           ],
                                         ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: <Widget>[
                                             Text(
                                               "${snapshot.data.recentUrls[index].shortUrl}",
@@ -213,13 +212,13 @@ class DashboardBlocPage extends StatelessWidget {
                                           ],
                                         ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: <Widget>[
                                             Text(
                                               'Hits:',
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold
-                                              ),
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                             Text(
                                               "${snapshot.data.recentUrls[index].hitCounter}",
@@ -228,13 +227,13 @@ class DashboardBlocPage extends StatelessWidget {
                                           ],
                                         ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: <Widget>[
                                             Text(
                                               'Hits:',
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold
-                                              ),
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                             Text(
                                               "${snapshot.data.recentUrls[index].hitCounter}",

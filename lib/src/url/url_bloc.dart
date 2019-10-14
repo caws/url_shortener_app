@@ -24,6 +24,7 @@ class UrlBloc {
   ValueObservable<Url> get url => _url.stream;
 
   ValueObservable<List<Url>> get urls => _urls.stream;
+  ValueObservable<int> get urlsCount => _urlsCount.stream;
 
   Future getUrls() async {
     try {
@@ -32,6 +33,24 @@ class UrlBloc {
       _urlsCount.sink.add(urls.length);
     } catch (e) {
       _urls.addError(e);
+    }
+  }
+
+  Future saveUrl(Url newUrl) async {
+    try {
+      final url = await _urlService.save(newUrl);
+      _url.sink.add(url);
+    } catch (e) {
+      _url.addError(e);
+    }
+  }
+
+  Future delete(Url deadUrl) async {
+    try {
+      final url = _urlService.delete(deadUrl);
+      _url.drain();
+    } catch (e) {
+      _url.addError(e);
     }
   }
 
@@ -47,7 +66,6 @@ class UrlBloc {
     }
   }
 
-  ValueObservable<int> get urlsCount => _urlsCount.stream;
 
   /// Take care of closing streams.
   void dispose() {

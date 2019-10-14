@@ -13,6 +13,7 @@ class DashboardService {
 
   /// Fetches a many urls from the database.
   Future<Dashboard> requestDashboard() async {
+    print("Getting dashboard data");
     final response = await _httpTunnel.get(DashboardRoutes.myDashboard());
 
     // Create a single Url object
