@@ -34,7 +34,7 @@ class UrlBlocPage extends StatelessWidget {
             highlightElevation: 22,
             child: Icon(Icons.add),
             onPressed: () {
-              Navigator.pushReplacementNamed(
+              Navigator.pushNamed(
                   context, NewUrlPage.routeName);
             },
           )

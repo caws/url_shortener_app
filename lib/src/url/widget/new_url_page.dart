@@ -76,6 +76,7 @@ class _NewUrlPage extends State<NewUrlPage> {
               child: Icon(Icons.save),
               onPressed: () {
                 setLoading(true);
+                urlsProvider.url.drain();
                 urlsProvider.saveUrl(Url(fullUrl: controllerFullUrl.text));
 
                 urlsProvider.url.listen((onData) {
@@ -93,9 +94,9 @@ class _NewUrlPage extends State<NewUrlPage> {
             stream: urlsProvider.url,
             builder: (context, snapshot) {
 
-              if (snapshot.data != null) {
-                return Text("Sugoi");
-              }
+//              if (snapshot.data != null) {
+//                return Text("Sugoi");
+//              }
 
               List<Widget> uiComponents = List();
               uiComponents.add(SizedBox(height: 40));

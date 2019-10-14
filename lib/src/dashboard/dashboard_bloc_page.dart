@@ -76,7 +76,7 @@ class DashboardBlocPage extends StatelessWidget {
                             ),
                             color: Colors.cyan,
                             onPressed: () {
-                              Navigator.pushReplacementNamed(
+                              Navigator.pushNamed(
                                   context, NewUrlPage.routeName);
                             },
                           ),
