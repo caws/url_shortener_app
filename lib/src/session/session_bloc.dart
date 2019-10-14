@@ -35,7 +35,7 @@ class SessionBloc {
       final isValid = await _sessionService.isTokenValid();
       _isValid.sink.add(isValid);
     } catch (e) {
-      _isLogged.addError(e);
+      _isValid.addError(e);
     }
   }
 
@@ -53,6 +53,16 @@ class SessionBloc {
     try {
       // Call the
       final result = _sessionService.storeSessionData(sessionData);
+    } catch (e) {
+      _sessionData.addError(e);
+    }
+  }
+
+  discardSessionData() async {
+    try {
+      // Call the
+      final result = _sessionService.discardSessionData();
+      _sessionData.drain();
     } catch (e) {
       _sessionData.addError(e);
     }

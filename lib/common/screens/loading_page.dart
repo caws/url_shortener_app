@@ -26,6 +26,8 @@ class LoadingPageState extends State<LoadingPage> {
       } else {
         Navigator.pushReplacementNamed(context, LoginBlocPage.routeName);
       }
+    }, onError: (error) {
+      Navigator.pushReplacementNamed(context, LoginBlocPage.routeName);
     });
 
     final logo = Hero(

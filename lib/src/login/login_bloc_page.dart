@@ -79,10 +79,10 @@ class LoginBlocPageState extends State<LoginBlocPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        onPressed: () {
+        onPressed: () async {
           _loading();
 
-          loginProvider.doLogin(email.initialValue, password.initialValue);
+          await loginProvider.doLogin(email.initialValue, password.initialValue);
 
           loginProvider.login.listen((data) {
             _setErrors(null);

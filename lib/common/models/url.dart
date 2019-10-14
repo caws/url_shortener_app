@@ -34,4 +34,12 @@ class Url {
         hitCounter = json["hit_counter"],
         status = json["status"],
         createdAt = json["created_at"];
+  
+  String urlSample() {
+    if (this.fullUrl.length > 24) {
+      return this.fullUrl.replaceAll("https://", '').replaceAll("http://", '');
+    } else {
+      return this.fullUrl.replaceAll("https://", '').replaceAll("http://", '');
+    }
+  }
 }

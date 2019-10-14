@@ -15,25 +15,25 @@ class HttpTunnel<T> {
   HttpTunnel(this._sessionService);
 
   Future<Response<T>> get(String url) async {
-    setAuthorizationToken();
+    await setAuthorizationToken();
 
     return await dio.get(url, options: this.options);
   }
 
   Future<Response<T>> post(String url, dynamic data) async {
-    setAuthorizationToken();
+    await setAuthorizationToken();
 
     return await dio.post(url, options: this.options, data: data);
   }
 
   Future<Response<T>> patch(String url, dynamic data) async {
-    setAuthorizationToken();
+    await setAuthorizationToken();
 
     return await dio.patch(url, options: this.options, data: data);
   }
 
   Future<Response<T>> delete(String url, dynamic data) async {
-    setAuthorizationToken();
+    await setAuthorizationToken();
 
     return await dio.delete(url, options: this.options, data: data);
   }
