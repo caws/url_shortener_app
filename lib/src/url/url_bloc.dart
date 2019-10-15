@@ -47,8 +47,7 @@ class UrlBloc {
 
   Future delete(Url deadUrl) async {
     try {
-      final url = _urlService.delete(deadUrl);
-      _url.drain();
+      await _urlService.delete(deadUrl);
     } catch (e) {
       _url.addError(e);
     }

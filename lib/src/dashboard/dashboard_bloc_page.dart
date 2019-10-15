@@ -123,7 +123,7 @@ class DashboardBlocPage extends StatelessWidget {
                             Column(
                               children: <Widget>[
                                 Text(
-                                  '1',
+                                  "${snapshot.data.numberOfUrls}",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 22,

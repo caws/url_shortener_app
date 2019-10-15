@@ -6,8 +6,6 @@ import 'package:shortener_app/src/url/widget/url_page.dart';
 
 // This class holds the View
 class UrlBlocPage extends StatelessWidget {
-  UrlBlocPage();
-
   static const routeName = "/urls";
 
   @override
@@ -34,8 +32,7 @@ class UrlBlocPage extends StatelessWidget {
             highlightElevation: 22,
             child: Icon(Icons.add),
             onPressed: () {
-              Navigator.pushNamed(
-                  context, NewUrlPage.routeName);
+              Navigator.pushNamed(context, NewUrlPage.routeName);
             },
           )
         ],
@@ -73,7 +70,7 @@ class UrlBlocPage extends StatelessWidget {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         primary: false,
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.only(top: 5, left:5, right: 5, bottom: 90),
                         itemCount: snapshot.data.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -89,7 +86,10 @@ class UrlBlocPage extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            UrlPage(url: snapshot.data[index], urlBloc: urlsProvider,)),
+                                            UrlPage(
+                                              url: snapshot.data[index],
+                                              urlBloc: urlsProvider,
+                                            )),
                                   );
                                 },
                                 child: Card(
@@ -109,7 +109,11 @@ class UrlBlocPage extends StatelessWidget {
                                               ),
                                               iconSize: 20.0,
                                               color: Colors.red,
-                                              onPressed: () {},
+                                              onPressed: () async {
+                                                await urlsProvider.delete(
+                                                    snapshot.data[index]);
+                                                await urlsProvider.getUrls();
+                                              },
                                             ),
                                           ],
                                         ),

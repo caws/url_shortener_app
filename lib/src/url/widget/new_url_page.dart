@@ -1,60 +1,37 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
-import 'package:shortener_app/src/dashboard/dashboard_bloc_page.dart';
-import 'package:shortener_app/src/url/url_bloc.dart';
 import 'package:shortener_app/src/url/url_provider.dart';
-import 'package:shortener_app/src/url/widget/url_page.dart';
 
 // This class holds the View
 class NewUrlPage extends StatefulWidget {
   static const routeName = "/new_url";
 
   @override
-  _NewUrlPage createState() => _NewUrlPage();
+  _NewUrlPageState createState() => _NewUrlPageState();
 }
 
-class _NewUrlPage extends State<NewUrlPage> {
-  bool isLoading = false;
-  String errorMessage = '';
+class _NewUrlPageState extends State<NewUrlPage> {
   final TextEditingController controllerFullUrl = new TextEditingController();
-
-  void setLoading(bool value) {
-    setState(() {
-      isLoading = value;
-    });
-  }
-
-  Widget _loadingSpinner() {
-    if (isLoading) {
-      return Column(
-        children: <Widget>[
-          CircularProgressIndicator(
-            backgroundColor: Colors.cyan,
-          ),
-          Text("Loading...")
-        ],
-      );
-    }
-
-    return SizedBox();
-  }
-
-  Widget _newUrlForm(AsyncSnapshot<Url> snapshot, List<Widget> uiComponents) {
-    return Scaffold(
-      body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: uiComponents))),
-    );
-  }
+  bool crap = false;
 
   @override
   Widget build(BuildContext context) {
     final urlsProvider = UrlProvider.of(context);
+
+    Widget _newUrlForm(AsyncSnapshot<Url> snapshot, List<Widget> uiComponents) {
+      return Scaffold(
+        body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: uiComponents))),
+      );
+    }
 
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -74,17 +51,18 @@ class _NewUrlPage extends State<NewUrlPage> {
               backgroundColor: Colors.green,
               highlightElevation: 22,
               child: Icon(Icons.save),
-              onPressed: () {
-                setLoading(true);
-                urlsProvider.url.drain();
-                urlsProvider.saveUrl(Url(fullUrl: controllerFullUrl.text));
+              onPressed: () async {
+                await urlsProvider
+                    .saveUrl(Url(fullUrl: controllerFullUrl.text));
 
-                urlsProvider.url.listen((onData) {
-                  setLoading(false);
-                  Navigator.pushReplacementNamed(
-                      context, DashboardBlocPage.routeName);
-                }, onError: (error) {
-                  setLoading(false);
+                final subscription = urlsProvider.url.listen(null);
+                subscription.onData((handleData) {
+                  subscription.cancel();
+                  Navigator.of(context).pop();
+                });
+
+                subscription.onError((handleError) {
+                  print("ERRROR");
                 });
               },
             )
@@ -93,11 +71,6 @@ class _NewUrlPage extends State<NewUrlPage> {
         body: StreamBuilder<Url>(
             stream: urlsProvider.url,
             builder: (context, snapshot) {
-
-//              if (snapshot.data != null) {
-//                return Text("Sugoi");
-//              }
-
               List<Widget> uiComponents = List();
               uiComponents.add(SizedBox(height: 40));
               uiComponents.add(Text(
@@ -111,7 +84,6 @@ class _NewUrlPage extends State<NewUrlPage> {
               if (snapshot.hasError) {
                 uiComponents.add(Text(snapshot.error.toString()));
               }
-              uiComponents.add(_loadingSpinner());
 
               uiComponents.add(TextFormField(
                 controller: controllerFullUrl,
