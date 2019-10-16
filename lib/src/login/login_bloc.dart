@@ -17,10 +17,11 @@ class LoginBloc {
 
   Future doLogin(String email, String password) async {
     try {
+      _login.sink.add(null);
       final login = await _loginService.login(email, password);
       _login.sink.add(login);
     } catch (e) {
-      _login.addError(e);
+      _login.sink.addError(e);
     }
   }
 

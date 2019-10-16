@@ -1,8 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shortener_app/common/models/authentication.dart';
 import 'package:shortener_app/src/dashboard/dashboard_bloc_page.dart';
 import 'package:shortener_app/src/login/login_provider.dart';
 import 'package:shortener_app/src/session/session_provider.dart';
+
+import 'login_bloc.dart';
 
 class LoginBlocPage extends StatefulWidget {
   static const routeName = "/login";
@@ -14,6 +18,56 @@ class LoginBlocPage extends StatefulWidget {
 class LoginBlocPageState extends State<LoginBlocPage> {
   bool isLoading = false;
   String errorMessage = '';
+  TextEditingController _email = new TextEditingController();
+  TextEditingController _password = new TextEditingController();
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  Widget _errorMessage() {
+    if (errorMessage.length > 0) {
+      return Center(child: Text(errorMessage));
+    }
+
+    return SizedBox();
+  }
+
+  Future _handleLogin(LoginBloc loginBloc) async {
+    _loading();
+    _setErrors(null);
+
+    loginBloc.doLogin(_email.text, _password.text);
+    loginBloc.login.listen((data) {
+      if (data != null) {
+        _setErrors(null);
+        _notLoading();
+        final sessionProvider = SessionProvider.of(context);
+        sessionProvider.setSessionData(data);
+        Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
+      } else {
+        _notLoading();
+      }
+    }, onError: (error) {
+      _setErrors(error);
+      _notLoading();
+    });
+  }
+
+  void _setErrors(DioError e) {
+    if (e != null) {
+      setState(() {
+        errorMessage = e.response.data.toString();
+      });
+    } else {
+      setState(() {
+        errorMessage = '';
+      });
+    }
+  }
 
   void _loading() {
     setState(() {
@@ -27,34 +81,38 @@ class LoginBlocPageState extends State<LoginBlocPage> {
     });
   }
 
-  void _setErrors(Exception e) {
-    if (e != null) {
-      setState(() {
-        errorMessage = e.toString();
-      });
-    } else {
-      setState(() {
-        errorMessage = '';
-      });
+  Widget _loadingSpinner() {
+    if (isLoading) {
+      return Column(
+        children: <Widget>[
+          CircularProgressIndicator(
+            backgroundColor: Colors.cyan,
+          ),
+          Text("Loading...")
+        ],
+      );
     }
+
+    return SizedBox();
   }
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = LoginProvider.of(context);
+    final loginBloc = LoginProvider.of(context);
+
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
         radius: 48.0,
-        child: Image.asset('assets/logo.png'),
+        child: Image.asset('assets/logo_shrtnr.png'),
       ),
     );
 
     final email = TextFormField(
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
-      initialValue: 'sugoi@gmail.com',
+      controller: _email,
       decoration: InputDecoration(
         hintText: 'Email',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -64,7 +122,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
 
     final password = TextFormField(
       autofocus: false,
-      initialValue: '123456',
+      controller: _password,
       obscureText: true,
       decoration: InputDecoration(
         hintText: 'Password',
@@ -73,60 +131,20 @@ class LoginBlocPageState extends State<LoginBlocPage> {
       ),
     );
 
-    final loginButton = Padding(
+    Widget loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
-          _loading();
-
-          await loginProvider.doLogin(
-              email.initialValue, password.initialValue);
-
-          final subscription = loginProvider.login.listen(null);
-          subscription.onData((data) {
-            subscription.cancel();
-            final sessionProvider = SessionProvider.of(context);
-            sessionProvider.setSessionData(data);
-            Navigator.pushReplacementNamed(
-                context, DashboardBlocPage.routeName);
-          });
-
-          subscription.onError((error) {
-            _setErrors(error);
-            _notLoading();
-          });
+          _handleLogin(loginBloc);
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
         child: Text('Log In', style: TextStyle(color: Colors.white)),
       ),
     );
-
-    Widget _loadingSpinner() {
-      if (isLoading) {
-        return Column(
-          children: <Widget>[
-            CircularProgressIndicator(
-              backgroundColor: Colors.cyan,
-            ),
-            Text("Loading...")
-          ],
-        );
-      }
-
-      return SizedBox();
-    }
-
-    Widget _errorMessage() {
-      if (errorMessage.length > 0) {
-        return Center(child: Text(errorMessage));
-      }
-
-      return SizedBox();
-    }
 
     return Scaffold(
       backgroundColor: Colors.white,

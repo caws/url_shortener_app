@@ -56,7 +56,7 @@ class SessionService {
 
     final sessionData = await getSessionData();
 
-    if (sessionData.token.length > 0) {
+    if ((sessionData.token != null) && (sessionData.token.length > 0)) {
       final currentDate = DateTime.now();
       final dateAsString = await localStorage.read(key: "storageDateTime");
       final date = DateTime.parse(dateAsString);
