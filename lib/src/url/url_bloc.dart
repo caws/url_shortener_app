@@ -22,7 +22,6 @@ class UrlBloc {
   UrlBloc(this._urlService);
 
   ValueObservable<Url> get url => _url.stream;
-
   ValueObservable<List<Url>> get urls => _urls.stream;
   ValueObservable<int> get urlsCount => _urlsCount.stream;
 

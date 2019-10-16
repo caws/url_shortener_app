@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
-import 'package:shortener_app/src/dashboard/dashboard_bloc_page.dart';
 import 'package:shortener_app/src/url/url_bloc.dart';
-
-import '../url_provider.dart';
 
 // This class holds the View
 class UrlPage extends StatefulWidget {
@@ -25,20 +22,17 @@ class _UrlPageState extends State<UrlPage> {
     });
   }
 
-  void _handleDelete() {
+  void _handleDelete(BuildContext context) {
     setLoading(true);
     widget.urlBloc.delete(widget.url);
 
     widget.urlBloc.url.listen((onData) {
-      setLoading(false);
-      Navigator.pushReplacementNamed(
-          context, DashboardBlocPage.routeName);
+      Navigator.of(context).pop();
     }, onError: (error) {
       setLoading(false);
     }, onDone: () {
       setLoading(false);
-      Navigator.pushReplacementNamed(
-          context, DashboardBlocPage.routeName);
+      Navigator.of(context).pop();
     });
   }
 
@@ -93,7 +87,7 @@ class _UrlPageState extends State<UrlPage> {
               highlightElevation: 22,
               child: Icon(Icons.delete),
               onPressed: () {
-                _handleDelete();
+                _handleDelete(context);
               },
             )
           ],

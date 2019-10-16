@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/dashboard.dart';
-import 'package:shortener_app/src/dashboard/dashboard_provider.dart';
+import 'package:shortener_app/src/app/app_provider.dart';
 import 'package:shortener_app/src/login/login_bloc_page.dart';
-import 'package:shortener_app/src/session/session_provider.dart';
 import 'package:shortener_app/src/url/url_bloc_page.dart';
-import 'package:shortener_app/src/url/url_provider.dart';
 import 'package:shortener_app/src/url/widget/new_url_page.dart';
 import 'package:shortener_app/src/url/widget/url_page.dart';
 
@@ -18,7 +16,8 @@ class DashboardBlocPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Taking the UrlProvider from the context
-    final dashboardProvider = DashboardProvider.of(context);
+    final dashboardProvider = AppProvider.dashboardBlocFrom(context);
+    final urlBloc = AppProvider.urlBlocFrom(context);
     dashboardProvider.getDashboard();
     return Scaffold(
       body: StreamBuilder<Dashboard>(
@@ -89,9 +88,9 @@ class DashboardBlocPage extends StatelessWidget {
                             ),
                             color: Colors.red,
                             onPressed: () async {
-                              final sessionProvider =
-                                  SessionProvider.of(context);
-                              await sessionProvider.discardSessionData();
+                              final sessionBloc =
+                                  AppProvider.sessionBlocFrom(context);
+                              await sessionBloc.discardSessionData();
 
                               Navigator.pushReplacementNamed(
                                   context, LoginBlocPage.routeName);
@@ -164,39 +163,54 @@ class DashboardBlocPage extends StatelessWidget {
                                 child: Padding(
                                   padding: EdgeInsets.only(top: 0.0),
                                   child: ListTile(
-                                    leading: Text("${snapshot.data.recentUrls[index].shortUrl}", style: TextStyle(fontWeight: FontWeight.bold),),
-                                    title: Text("${snapshot.data.recentUrls[index].urlSample()}"),
+                                    leading: Text(
+                                      "${snapshot.data.recentUrls[index].shortUrl}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    title: Text(
+                                        "${snapshot.data.recentUrls[index].urlSample()}"),
                                     trailing: IconButton(
                                       color: Colors.blueAccent,
-                                      icon: Icon(
-                                        Icons.search
-                                      ),
+                                      icon: Icon(Icons.search),
                                       onPressed: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (BuildContext context) =>
                                                   UrlPage(
-                                                    urlBloc: UrlProvider.of(context),
-                                                      url: snapshot
-                                                          .data.recentUrls[index])),
+                                                      urlBloc: urlBloc,
+                                                      url: snapshot.data
+                                                          .recentUrls[index])),
                                         );
                                       },
                                     ),
                                     subtitle: Column(
                                       children: <Widget>[
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: <Widget>[
-                                            Text("Hits:", style: TextStyle(fontWeight: FontWeight.bold),),
-                                            Text("${snapshot.data.recentUrls[index].hitCounter}")
+                                            Text(
+                                              "Hits:",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                "${snapshot.data.recentUrls[index].hitCounter}")
                                           ],
                                         ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: <Widget>[
-                                            Text("Status:", style: TextStyle(fontWeight: FontWeight.bold),),
-                                            Text("${snapshot.data.recentUrls[index].status}")
+                                            Text(
+                                              "Status:",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                "${snapshot.data.recentUrls[index].status}")
                                           ],
                                         )
                                       ],

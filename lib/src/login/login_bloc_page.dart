@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shortener_app/common/models/authentication.dart';
+import 'package:shortener_app/src/app/app_provider.dart';
 import 'package:shortener_app/src/dashboard/dashboard_bloc_page.dart';
-import 'package:shortener_app/src/login/login_provider.dart';
-import 'package:shortener_app/src/session/session_provider.dart';
 
 import 'login_bloc.dart';
 
@@ -45,7 +43,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
       if (data != null) {
         _setErrors(null);
         _notLoading();
-        final sessionProvider = SessionProvider.of(context);
+        final sessionProvider = AppProvider.sessionBlocFrom(context);
         sessionProvider.setSessionData(data);
         Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
       } else {
@@ -102,7 +100,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
 
   @override
   Widget build(BuildContext context) {
-    final loginBloc = LoginProvider.of(context);
+    final loginBloc = AppProvider.loginBlocFrom(context);
 
     final logo = Hero(
       tag: 'hero',

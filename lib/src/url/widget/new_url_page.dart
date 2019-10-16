@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
+import 'package:shortener_app/src/app/app_provider.dart';
 import 'package:shortener_app/src/url/url_bloc.dart';
-import 'package:shortener_app/src/url/url_provider.dart';
 
 // This class holds the View
 class NewUrlPage extends StatefulWidget {
@@ -17,7 +17,7 @@ class _NewUrlPageState extends State<NewUrlPage> {
   final TextEditingController controllerFullUrl = new TextEditingController();
   bool crap = false;
 
-  Future _handleSave(UrlBloc urlBloc) async {
+  Future _handleSave(UrlBloc urlBloc, BuildContext context) async {
     await urlBloc
         .saveUrl(Url(fullUrl: controllerFullUrl.text));
 
@@ -34,7 +34,7 @@ class _NewUrlPageState extends State<NewUrlPage> {
 
   @override
   Widget build(BuildContext context) {
-    final urlBloc = UrlProvider.of(context);
+    final urlBloc = AppProvider.urlBlocFrom(context);
 
     Widget _newUrlForm(AsyncSnapshot<Url> snapshot, List<Widget> uiComponents) {
       return Scaffold(
@@ -68,7 +68,7 @@ class _NewUrlPageState extends State<NewUrlPage> {
               highlightElevation: 22,
               child: Icon(Icons.save),
               onPressed: () async {
-                _handleSave(urlBloc);
+                _handleSave(urlBloc, context);
               },
             )
           ],
