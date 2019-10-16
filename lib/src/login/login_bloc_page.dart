@@ -28,7 +28,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
     }
   }
 
-  Future _handleLogin(LoginBloc loginBloc) async {
+  Future _handleLogin(BuildContext context, LoginBloc loginBloc) async {
     _loading();
     _setErrors(null);
 
@@ -134,7 +134,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
-          _handleLogin(loginBloc);
+          _handleLogin(context, loginBloc);
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,

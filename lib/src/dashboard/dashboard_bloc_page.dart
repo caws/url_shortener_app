@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shortener_app/common/models/authentication.dart';
 import 'package:shortener_app/common/models/dashboard.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
 import 'package:shortener_app/src/login/login_bloc_page.dart';
@@ -17,8 +18,10 @@ class DashboardBlocPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Taking the UrlProvider from the context
     final dashboardProvider = AppProvider.dashboardBlocFrom(context);
+    final sessionBloc = AppProvider.sessionBlocFrom(context);
     final urlBloc = AppProvider.urlBlocFrom(context);
     dashboardProvider.getDashboard();
+    sessionBloc.getSessionData();
     return Scaffold(
       body: StreamBuilder<Dashboard>(
           stream: dashboardProvider.dashboard,
@@ -49,10 +52,20 @@ class DashboardBlocPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 3),
-                      Text(
-                        "Hi Charles",
-                        style: TextStyle(),
-                      ),
+                      StreamBuilder<Authentication>(
+                          stream: sessionBloc.sessionData,
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null) {
+                              return CircularProgressIndicator(
+                                backgroundColor: Colors.blueAccent,
+                              );
+                            }
+
+                            return Text(
+                              "Hi ${snapshot.data.user.name}",
+                              style: TextStyle(),
+                            );
+                          }),
                       SizedBox(height: 20),
                       Row(
                         mainAxisSize: MainAxisSize.min,

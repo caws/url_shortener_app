@@ -18,23 +18,27 @@ class SessionService {
         key: "storageDateTime", value: DateTime.now().toIso8601String());
     localStorage.write(key: "token", value: sessionData.token);
     localStorage.write(key: "email", value: sessionData.user.email);
+    localStorage.write(key: "name", value: sessionData.user.name);
   }
 
   void discardSessionData() async {
     localStorage.delete(key: "storageDateTime");
     localStorage.delete(key: "token");
     localStorage.delete(key: "email");
+    localStorage.delete(key: "name");
   }
 
   Future<Authentication> getSessionData() async {
     // Do something to return the token here
     final token = await localStorage.read(key: "token");
     final email = await localStorage.read(key: "email");
+    final name = await localStorage.read(key: "name");
 
     return Authentication(
         token: token,
         user: User(
           email: email,
+          name: name,
         ));
   }
 

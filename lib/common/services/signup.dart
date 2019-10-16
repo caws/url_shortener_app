@@ -13,8 +13,8 @@ class SignupService {
   SignupService(this._httpTunnel);
 
   /// Fetches a many urls from the database.
-  Future<User> signup(String email, String password) async {
-    var authenticationData = json.encode({'email': email, 'password': password});
+  Future<User> signup(String name, email, password) async {
+    var authenticationData = json.encode({'name': name, 'email': email, 'password': password});
 
     final response = await _httpTunnel.post(AuthenticationRoutes.signup(), authenticationData);
 

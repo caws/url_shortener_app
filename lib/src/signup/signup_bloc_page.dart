@@ -6,9 +6,8 @@ import 'package:shortener_app/src/app/app_provider.dart';
 import 'package:shortener_app/src/login/login_bloc_page.dart';
 import 'package:shortener_app/src/signup/signup_bloc.dart';
 
-
 class SignupBlocPage extends StatefulWidget {
-  static const routeName = "/login";
+  static const routeName = "/signup";
 
   @override
   SignupBlocPageState createState() => SignupBlocPageState();
@@ -16,7 +15,10 @@ class SignupBlocPage extends StatefulWidget {
 
 class SignupBlocPageState extends State<SignupBlocPage> {
   bool isLoading = false;
-  HttpErrorWidget errorWidget = HttpErrorWidget(dioError: null,);
+  HttpErrorWidget errorWidget = HttpErrorWidget(
+    dioError: null,
+  );
+  TextEditingController _name = new TextEditingController();
   TextEditingController _email = new TextEditingController();
   TextEditingController _password = new TextEditingController();
 
@@ -27,16 +29,14 @@ class SignupBlocPageState extends State<SignupBlocPage> {
     }
   }
 
-  Future _handleLogin(SignUpBloc signupBloc) async {
+  Future _handleLogin(BuildContext context, SignUpBloc signupBloc) async {
     _loading();
     _setErrors(null);
 
-    signupBloc.signUp(_email.text, _password.text);
-    signupBloc.login.listen((data) {
+    signupBloc.signUp(_name.text, _email.text, _password.text);
+    signupBloc.signup.listen((data) {
       if (data != null) {
-        _setErrors(null);
-        _notLoading();
-        Navigator.pushReplacementNamed(context, LoginBlocPage.routeName);
+        Navigator.of(context).pop();
       } else {
         _notLoading();
       }
@@ -47,9 +47,9 @@ class SignupBlocPageState extends State<SignupBlocPage> {
   }
 
   void _setErrors(DioError e) {
-   setState(() {
-     errorWidget = HttpErrorWidget(dioError: e);
-   });
+    setState(() {
+      errorWidget = HttpErrorWidget(dioError: e);
+    });
   }
 
   void _loading() {
@@ -92,6 +92,17 @@ class SignupBlocPageState extends State<SignupBlocPage> {
       ),
     );
 
+    final name = TextFormField(
+      keyboardType: TextInputType.emailAddress,
+      autofocus: false,
+      controller: _name,
+      decoration: InputDecoration(
+        hintText: 'Name',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
+      ),
+    );
+
     final email = TextFormField(
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
@@ -131,7 +142,7 @@ class SignupBlocPageState extends State<SignupBlocPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
-          _handleLogin(signupBloc);
+          _handleLogin(context, signupBloc);
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
@@ -150,6 +161,8 @@ class SignupBlocPageState extends State<SignupBlocPage> {
             SizedBox(height: 48.0),
             _loadingSpinner(),
             errorWidget,
+            SizedBox(height: 8.0),
+            name,
             SizedBox(height: 8.0),
             email,
             SizedBox(height: 8.0),

@@ -13,12 +13,12 @@ class SignUpBloc {
 
   SignUpBloc(this._signUpService);
 
-  ValueObservable<User> get login => _signUp.stream;
+  ValueObservable<User> get signup => _signUp.stream;
 
-  Future signUp(String email, String password) async {
+  Future signUp(String name, email, password) async {
     try {
       _signUp.sink.add(null);
-      final signUp = await _signUpService.signup(email, password);
+      final signUp = await _signUpService.signup(name, email, password);
       _signUp.sink.add(signUp);
     } catch (e) {
       _signUp.sink.addError(e);
