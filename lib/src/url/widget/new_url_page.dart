@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
+import 'package:shortener_app/common/screens/shared/http_error_widget.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
 import 'package:shortener_app/src/url/url_bloc.dart';
 
@@ -14,21 +15,21 @@ class NewUrlPage extends StatefulWidget {
 }
 
 class _NewUrlPageState extends State<NewUrlPage> {
+  HttpErrorWidget errorWidget = HttpErrorWidget(
+    dioError: null,
+  );
   final TextEditingController controllerFullUrl = new TextEditingController();
   bool crap = false;
 
   Future _handleSave(UrlBloc urlBloc, BuildContext context) async {
-    await urlBloc
-        .saveUrl(Url(fullUrl: controllerFullUrl.text));
+    await urlBloc.saveUrl(Url(fullUrl: controllerFullUrl.text));
 
     final subscription = urlBloc.url.listen(null);
     subscription.onData((handleData) {
       subscription.cancel();
-      Navigator.of(context).pop();
-    });
-
-    subscription.onError((handleError) {
-      print("ERRROR");
+      if (handleData != null) {
+        Navigator.of(context).pop();
+      }
     });
   }
 
@@ -87,7 +88,9 @@ class _NewUrlPageState extends State<NewUrlPage> {
               ));
 
               if (snapshot.hasError) {
-                uiComponents.add(Text(snapshot.error.toString()));
+                uiComponents.add(HttpErrorWidget(
+                  dioError: snapshot.error,
+                ));
               }
 
               uiComponents.add(TextFormField(

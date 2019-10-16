@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shortener_app/common/screens/shared/http_error_widget.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
 import 'package:shortener_app/src/dashboard/dashboard_bloc_page.dart';
 
@@ -15,7 +16,7 @@ class LoginBlocPage extends StatefulWidget {
 
 class LoginBlocPageState extends State<LoginBlocPage> {
   bool isLoading = false;
-  String errorMessage = '';
+  HttpErrorWidget errorWidget = HttpErrorWidget(dioError: null,);
   TextEditingController _email = new TextEditingController();
   TextEditingController _password = new TextEditingController();
 
@@ -24,14 +25,6 @@ class LoginBlocPageState extends State<LoginBlocPage> {
     if (mounted) {
       super.setState(fn);
     }
-  }
-
-  Widget _errorMessage() {
-    if (errorMessage.length > 0) {
-      return Center(child: Text(errorMessage));
-    }
-
-    return SizedBox();
   }
 
   Future _handleLogin(LoginBloc loginBloc) async {
@@ -56,19 +49,9 @@ class LoginBlocPageState extends State<LoginBlocPage> {
   }
 
   void _setErrors(DioError e) {
-    if (e != null) {
-      setState(() {
-        if (e.response != null) {
-          errorMessage = e.response.data.toString();
-        } else {
-          errorMessage = e.message.toString();
-        }
-      });
-    } else {
-      setState(() {
-        errorMessage = '';
-      });
-    }
+   setState(() {
+     errorWidget = HttpErrorWidget(dioError: e);
+   });
   }
 
   void _loading() {
@@ -158,7 +141,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
             logo,
             SizedBox(height: 48.0),
             _loadingSpinner(),
-            _errorMessage(),
+            errorWidget,
             SizedBox(height: 8.0),
             email,
             SizedBox(height: 8.0),
