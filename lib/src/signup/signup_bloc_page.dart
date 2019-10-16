@@ -36,7 +36,7 @@ class SignupBlocPageState extends State<SignupBlocPage> {
     signupBloc.signUp(_name.text, _email.text, _password.text);
     signupBloc.signup.listen((data) {
       if (data != null) {
-        Navigator.of(context).pop();
+        Navigator.pushNamed(context, LoginBlocPage.routeName);
       } else {
         _notLoading();
       }

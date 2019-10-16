@@ -22,10 +22,13 @@ class LoadingPageState extends State<LoadingPage> {
 
     Widget _loadingSpinner() {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+//          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             CircularProgressIndicator(
               backgroundColor: Colors.cyan,
             ),
+            SizedBox(height: 20.0),
             Text("Loading...")
           ],
         );
@@ -39,10 +42,8 @@ class LoadingPageState extends State<LoadingPage> {
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           children: <Widget>[
             logo,
-            SizedBox(height: 48.0),
+            SizedBox(height: 20.0),
             _loadingSpinner(),
-            SizedBox(height: 8.0),
-            SizedBox(height: 8.0),
             SizedBox(height: 24.0),
           ],
         ),
