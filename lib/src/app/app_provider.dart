@@ -2,10 +2,12 @@ import 'package:flutter/widgets.dart';
 import 'package:shortener_app/common/services/dashboard.dart';
 import 'package:shortener_app/common/services/login.dart';
 import 'package:shortener_app/common/services/session.dart';
+import 'package:shortener_app/common/services/signup.dart';
 import 'package:shortener_app/common/services/url.dart';
 import 'package:shortener_app/src/dashboard/dashboard_bloc.dart';
 import 'package:shortener_app/src/login/login_bloc.dart';
 import 'package:shortener_app/src/session/session_bloc.dart';
+import 'package:shortener_app/src/signup/signup_bloc.dart';
 import 'package:shortener_app/src/url/url_bloc.dart';
 
 class AppProvider extends InheritedWidget {
@@ -13,22 +15,26 @@ class AppProvider extends InheritedWidget {
   final DashboardBloc dashboardBloc;
   final UrlBloc urlBloc;
   final LoginBloc loginBloc;
+  final SignUpBloc signUpBloc;
 
   AppProvider({
     SessionService sessionService,
     DashboardService dashboardService,
     UrlService urlService,
     LoginService loginService,
+    SignupService signupService,
     Key key,
     SessionBloc sessionBloc,
     DashboardBloc dashboardBloc,
     UrlBloc urlBloc,
     LoginBloc loginBloc,
+    SignUpBloc signUpBloc,
     Widget child,
   })  : sessionBloc = sessionBloc ?? SessionBloc(sessionService),
         dashboardBloc = dashboardBloc ?? DashboardBloc(dashboardService),
         urlBloc = urlBloc ?? UrlBloc(urlService),
         loginBloc = loginBloc ?? LoginBloc(loginService),
+        signUpBloc = signUpBloc ?? SignUpBloc(signupService),
         super(key: key, child: child);
 
   @override
@@ -49,4 +55,8 @@ class AppProvider extends InheritedWidget {
   static LoginBloc loginBlocFrom(BuildContext context) =>
       (context.inheritFromWidgetOfExactType(AppProvider) as AppProvider)
           .loginBloc;
+
+  static SignUpBloc signupBlocFrom(BuildContext context) =>
+      (context.inheritFromWidgetOfExactType(AppProvider) as AppProvider)
+          .signUpBloc;
 }

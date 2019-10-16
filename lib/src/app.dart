@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shortener_app/common/screens/loading_page.dart';
 import 'package:shortener_app/common/theme/theme.dart';
 import 'package:shortener_app/src/session/session_bloc.dart';
+import 'package:shortener_app/src/signup/signup_bloc.dart';
+import 'package:shortener_app/src/signup/signup_bloc_page.dart';
 import 'package:shortener_app/src/url/url_bloc.dart';
 import 'package:shortener_app/src/url/url_bloc_page.dart';
 import 'package:shortener_app/src/url/widget/new_url_page.dart';
@@ -16,9 +18,11 @@ class ShortenerApp extends StatelessWidget {
   final UrlBloc urlBloc;
   final DashboardBloc dashboardBloc;
   final LoginBloc loginBloc;
+  final SignUpBloc signupBloc;
   final SessionBloc sessionBloc;
 
-  ShortenerApp(this.urlBloc, this.dashboardBloc, this.loginBloc, this.sessionBloc);
+  ShortenerApp(this.urlBloc, this.dashboardBloc, this.loginBloc,
+      this.sessionBloc, this.signupBloc);
 
   // This widget is the root of your application.
   @override
@@ -30,6 +34,7 @@ class ShortenerApp extends StatelessWidget {
       dashboardBloc: dashboardBloc,
       loginBloc: loginBloc,
       sessionBloc: sessionBloc,
+      signUpBloc: signupBloc,
       child: MaterialApp(
         title: 'Url Shortener',
         theme: appTheme,
@@ -59,6 +64,7 @@ class ShortenerApp extends StatelessWidget {
             }),
         routes: <String, WidgetBuilder>{
           LoginBlocPage.routeName: (context) => LoginBlocPage(),
+          SignupBlocPage.routeName: (context) => SignupBlocPage(),
           UrlBlocPage.routeName: (context) => UrlBlocPage(),
           NewUrlPage.routeName: (context) => NewUrlPage(),
           DashboardBlocPage.routeName: (context) => DashboardBlocPage()

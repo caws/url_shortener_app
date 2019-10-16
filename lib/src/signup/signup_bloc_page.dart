@@ -3,19 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/screens/shared/http_error_widget.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
-import 'package:shortener_app/src/dashboard/dashboard_bloc_page.dart';
-import 'package:shortener_app/src/signup/signup_bloc_page.dart';
+import 'package:shortener_app/src/login/login_bloc_page.dart';
+import 'package:shortener_app/src/signup/signup_bloc.dart';
 
-import 'login_bloc.dart';
 
-class LoginBlocPage extends StatefulWidget {
+class SignupBlocPage extends StatefulWidget {
   static const routeName = "/login";
 
   @override
-  LoginBlocPageState createState() => LoginBlocPageState();
+  SignupBlocPageState createState() => SignupBlocPageState();
 }
 
-class LoginBlocPageState extends State<LoginBlocPage> {
+class SignupBlocPageState extends State<SignupBlocPage> {
   bool isLoading = false;
   HttpErrorWidget errorWidget = HttpErrorWidget(dioError: null,);
   TextEditingController _email = new TextEditingController();
@@ -28,18 +27,16 @@ class LoginBlocPageState extends State<LoginBlocPage> {
     }
   }
 
-  Future _handleLogin(LoginBloc loginBloc) async {
+  Future _handleLogin(SignUpBloc signupBloc) async {
     _loading();
     _setErrors(null);
 
-    loginBloc.doLogin(_email.text, _password.text);
-    loginBloc.login.listen((data) {
+    signupBloc.signUp(_email.text, _password.text);
+    signupBloc.login.listen((data) {
       if (data != null) {
         _setErrors(null);
         _notLoading();
-        final sessionProvider = AppProvider.sessionBlocFrom(context);
-        sessionProvider.setSessionData(data);
-        Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
+        Navigator.pushReplacementNamed(context, LoginBlocPage.routeName);
       } else {
         _notLoading();
       }
@@ -84,7 +81,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
 
   @override
   Widget build(BuildContext context) {
-    final loginBloc = AppProvider.loginBlocFrom(context);
+    final signupBloc = AppProvider.signupBlocFrom(context);
 
     final logo = Hero(
       tag: 'hero',
@@ -117,28 +114,28 @@ class LoginBlocPageState extends State<LoginBlocPage> {
       ),
     );
 
-    final newUser = FlatButton(
+    final alreadyHaveAnAccount = FlatButton(
       child: Text(
-        'New User?',
+        'Already have an account?',
         style: TextStyle(color: Colors.black54),
       ),
       onPressed: () {
-        Navigator.pushNamed(context, SignupBlocPage.routeName);
+        Navigator.of(context).pop();
       },
     );
 
-    Widget loginButton = Padding(
+    Widget signupButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
-          _handleLogin(loginBloc);
+          _handleLogin(signupBloc);
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
-        child: Text('Log In', style: TextStyle(color: Colors.white)),
+        child: Text('Sign Up', style: TextStyle(color: Colors.white)),
       ),
     );
 
@@ -158,8 +155,8 @@ class LoginBlocPageState extends State<LoginBlocPage> {
             SizedBox(height: 8.0),
             password,
             SizedBox(height: 24.0),
-            loginButton,
-            newUser
+            signupButton,
+            alreadyHaveAnAccount
           ],
         ),
       ),
