@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:shortener_app/common/models/url.dart';
 import 'package:shortener_app/common/routes/sub_routes/url_routes.dart';
-import 'package:shortener_app/common/services/session.dart';
 import 'package:shortener_app/common/utils/http_tunnel.dart';
 
 /// This class consumes the Url Shortener API

@@ -1,4 +1,3 @@
-import 'package:shortener_app/common/models/url.dart';
 import 'package:shortener_app/common/models/user.dart';
 
 class Authentication {
