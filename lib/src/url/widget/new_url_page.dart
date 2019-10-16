@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
+import 'package:shortener_app/src/url/url_bloc.dart';
 import 'package:shortener_app/src/url/url_provider.dart';
 
 // This class holds the View
@@ -16,9 +17,24 @@ class _NewUrlPageState extends State<NewUrlPage> {
   final TextEditingController controllerFullUrl = new TextEditingController();
   bool crap = false;
 
+  Future _handleSave(UrlBloc urlBloc) async {
+    await urlBloc
+        .saveUrl(Url(fullUrl: controllerFullUrl.text));
+
+    final subscription = urlBloc.url.listen(null);
+    subscription.onData((handleData) {
+      subscription.cancel();
+      Navigator.of(context).pop();
+    });
+
+    subscription.onError((handleError) {
+      print("ERRROR");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final urlsProvider = UrlProvider.of(context);
+    final urlBloc = UrlProvider.of(context);
 
     Widget _newUrlForm(AsyncSnapshot<Url> snapshot, List<Widget> uiComponents) {
       return Scaffold(
@@ -52,24 +68,13 @@ class _NewUrlPageState extends State<NewUrlPage> {
               highlightElevation: 22,
               child: Icon(Icons.save),
               onPressed: () async {
-                await urlsProvider
-                    .saveUrl(Url(fullUrl: controllerFullUrl.text));
-
-                final subscription = urlsProvider.url.listen(null);
-                subscription.onData((handleData) {
-                  subscription.cancel();
-                  Navigator.of(context).pop();
-                });
-
-                subscription.onError((handleError) {
-                  print("ERRROR");
-                });
+                _handleSave(urlBloc);
               },
             )
           ],
         ),
         body: StreamBuilder<Url>(
-            stream: urlsProvider.url,
+            stream: urlBloc.url,
             builder: (context, snapshot) {
               List<Widget> uiComponents = List();
               uiComponents.add(SizedBox(height: 40));

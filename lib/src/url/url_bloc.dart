@@ -38,10 +38,11 @@ class UrlBloc {
 
   Future saveUrl(Url newUrl) async {
     try {
+      _url.sink.add(null);
       final url = await _urlService.save(newUrl);
       _url.sink.add(url);
     } catch (e) {
-      _url.addError(e);
+      _url.sink.addError(e);
     }
   }
 

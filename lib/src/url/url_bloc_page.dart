@@ -40,13 +40,13 @@ class UrlBlocPage extends StatelessWidget {
       body: StreamBuilder<List<Url>>(
           stream: urlsProvider.urls,
           builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-
-            if (snapshot.data == null) {
-              return Text('No data');
-            }
+//            if (snapshot.hasError) {
+//              return Text(snapshot.error.toString());
+//            }
+//
+//            if (snapshot.data == null) {
+//              return Text('No data');
+//            }
 
             return Scaffold(
               body: SingleChildScrollView(
@@ -66,7 +66,7 @@ class UrlBlocPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 3),
-                      ListView.builder(
+                      snapshot.data == null || snapshot.hasError == true ? Text("No Data") : ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         primary: false,

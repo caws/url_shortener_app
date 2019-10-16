@@ -60,7 +60,11 @@ class LoginBlocPageState extends State<LoginBlocPage> {
   void _setErrors(DioError e) {
     if (e != null) {
       setState(() {
-        errorMessage = e.response.data.toString();
+        if (e.response != null) {
+          errorMessage = e.response.data.toString();
+        } else {
+          errorMessage = e.message.toString();
+        }
       });
     } else {
       setState(() {

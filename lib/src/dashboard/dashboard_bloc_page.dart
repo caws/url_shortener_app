@@ -5,6 +5,7 @@ import 'package:shortener_app/src/dashboard/dashboard_provider.dart';
 import 'package:shortener_app/src/login/login_bloc_page.dart';
 import 'package:shortener_app/src/session/session_provider.dart';
 import 'package:shortener_app/src/url/url_bloc_page.dart';
+import 'package:shortener_app/src/url/url_provider.dart';
 import 'package:shortener_app/src/url/widget/new_url_page.dart';
 import 'package:shortener_app/src/url/widget/url_page.dart';
 
@@ -176,6 +177,7 @@ class DashboardBlocPage extends StatelessWidget {
                                           MaterialPageRoute(
                                               builder: (BuildContext context) =>
                                                   UrlPage(
+                                                    urlBloc: UrlProvider.of(context),
                                                       url: snapshot
                                                           .data.recentUrls[index])),
                                         );

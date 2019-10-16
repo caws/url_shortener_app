@@ -25,6 +25,23 @@ class _UrlPageState extends State<UrlPage> {
     });
   }
 
+  void _handleDelete() {
+    setLoading(true);
+    widget.urlBloc.delete(widget.url);
+
+    widget.urlBloc.url.listen((onData) {
+      setLoading(false);
+      Navigator.pushReplacementNamed(
+          context, DashboardBlocPage.routeName);
+    }, onError: (error) {
+      setLoading(false);
+    }, onDone: () {
+      setLoading(false);
+      Navigator.pushReplacementNamed(
+          context, DashboardBlocPage.routeName);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget _infoLine(String label, String value) {
@@ -76,20 +93,7 @@ class _UrlPageState extends State<UrlPage> {
               highlightElevation: 22,
               child: Icon(Icons.delete),
               onPressed: () {
-                setLoading(true);
-                widget.urlBloc.delete(widget.url);
-
-                widget.urlBloc.url.listen((onData) {
-                  setLoading(false);
-                  Navigator.pushReplacementNamed(
-                      context, DashboardBlocPage.routeName);
-                }, onError: (error) {
-                  setLoading(false);
-                }, onDone: () {
-                  setLoading(false);
-                  Navigator.pushReplacementNamed(
-                      context, DashboardBlocPage.routeName);
-                });
+                _handleDelete();
               },
             )
           ],
