@@ -66,104 +66,69 @@ class UrlBlocPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 3),
-                      GridView.builder(
+                      ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         primary: false,
                         padding: EdgeInsets.only(top: 5, left:5, right: 5, bottom: 90),
                         itemCount: snapshot.data.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 200 / 200,
-                        ),
                         itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Container(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            UrlPage(
-                                              url: snapshot.data[index],
-                                              urlBloc: urlsProvider,
-                                            )),
-                                  );
-                                },
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        UrlPage(
+                                          url: snapshot.data[index],
+                                          urlBloc: urlsProvider,
+                                        )),
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(0.0),
+                              child: Container(
                                 child: Card(
                                   elevation: 3.0,
                                   child: Padding(
                                     padding: EdgeInsets.only(top: 0.0),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            IconButton(
-                                              icon: Icon(
-                                                Icons.delete,
-                                                color: Colors.red,
-                                              ),
-                                              iconSize: 20.0,
-                                              color: Colors.red,
-                                              onPressed: () async {
-                                                await urlsProvider.delete(
-                                                    snapshot.data[index]);
-                                                await urlsProvider.getUrls();
-                                              },
-                                            ),
-                                          ],
+                                    child: ListTile(
+                                      leading: Text("${snapshot.data[index].shortUrl}", style: TextStyle(fontWeight: FontWeight.bold),),
+                                      title: Text("${snapshot.data[index].urlSample()}"),
+                                      trailing: IconButton(
+                                        color: Colors.red,
+                                        icon: Icon(
+                                            Icons.delete
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Text(
-                                              "${snapshot.data[index].shortUrl}",
-                                              style: TextStyle(),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: <Widget>[
-                                            Text(
-                                              'Hits:',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              "${snapshot.data[index].hitCounter}",
-                                              style: TextStyle(),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: <Widget>[
-                                            Text(
-                                              'Hits:',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              "${snapshot.data[index].hitCounter}",
-                                              style: TextStyle(),
-                                            )
-                                          ],
-                                        )
-                                      ],
+                                        onPressed: () async {
+                                          await urlsProvider.delete(
+                                              snapshot.data[index]);
+                                          await urlsProvider.getUrls();
+                                        },
+                                      ),
+                                      subtitle: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            children: <Widget>[
+                                              Text("Hits:", style: TextStyle(fontWeight: FontWeight.bold),),
+                                              Text("${snapshot.data[index].hitCounter}")
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            children: <Widget>[
+                                              Text("Status:", style: TextStyle(fontWeight: FontWeight.bold),),
+                                              Text("${snapshot.data[index].status}")
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      isThreeLine: true,
                                     ),
                                   ),
                                 ),
                               ),
-                              height: 190.0,
-                              width: MediaQuery.of(context).size.width - 100.0,
                             ),
                           );
                         },
