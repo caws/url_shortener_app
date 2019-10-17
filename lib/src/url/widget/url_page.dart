@@ -27,11 +27,19 @@ class _UrlPageState extends State<UrlPage> {
     final urlBloc = AppProvider.urlBlocFrom(context);
     urlBloc.delete(widget.url);
 
-    urlBloc.url.listen((onData) {
+    final subscription = urlBloc.url.listen(null);
+    subscription.onData((handleData) {
+      subscription.cancel();
       Navigator.of(context).pop();
-    }, onError: (error) {
+    });
+
+    subscription.onError((handleError) {
+      subscription.cancel();
       setLoading(false);
-    }, onDone: () {
+    });
+
+    subscription.onDone(() {
+      subscription.cancel();
       setLoading(false);
       Navigator.of(context).pop();
     });

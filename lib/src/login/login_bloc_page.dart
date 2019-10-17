@@ -35,13 +35,13 @@ class LoginBlocPageState extends State<LoginBlocPage> {
     _setErrors(null);
 
     loginBloc.doLogin(_email.text, _password.text);
-    loginBloc.login.listen((data) {
+    loginBloc.login.listen((data) async {
       if (data != null) {
         _setErrors(null);
         _notLoading();
         final sessionProvider = AppProvider.sessionBlocFrom(context);
         sessionProvider.setSessionData(data);
-        Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
+        await Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
       } else {
         _notLoading();
       }
