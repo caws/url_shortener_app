@@ -17,6 +17,7 @@ reflected everywhere in the app via the streams.
 ## Getting Started
 
 Clone the repository, get the dependencies and you're good to go.
+You'll also need to have a backend for this or use this sample backend project.
 
 ## Why
 
@@ -25,8 +26,8 @@ that I can use for other medium-sized projects.
 
 ## Screenshots
 
-<a href="https://ibb.co/Wpd9nyQ"><img src="https://i.ibb.co/BK7DLZm/Captura-de-tela-de-2019-10-16-23-45-12.png" alt="Captura-de-tela-de-2019-10-16-23-45-12" border="0" width=300></a>
-<a href="https://ibb.co/zbX3WBn"><img src="https://i.ibb.co/CvbjpY1/Captura-de-tela-de-2019-10-16-23-44-54.png" alt="Captura-de-tela-de-2019-10-16-23-44-54" border="0" width=300></a>
-<a href="https://ibb.co/njx6kK0"><img src="https://i.ibb.co/zZqQft5/Captura-de-tela-de-2019-10-16-23-44-44.png" alt="Captura-de-tela-de-2019-10-16-23-44-44" border="0" width=300></a>
-<a href="https://ibb.co/s56DkLb"><img src="https://i.ibb.co/HNxM1mB/Captura-de-tela-de-2019-10-16-23-39-44.png" alt="Captura-de-tela-de-2019-10-16-23-39-44" border="0" width=300></a>
 <a href="https://ibb.co/Cw834XZ"><img src="https://i.ibb.co/b6mMYyZ/Captura-de-tela-de-2019-10-16-23-39-21.png" alt="Captura-de-tela-de-2019-10-16-23-39-21" border="0" width=300></a>
+<a href="https://ibb.co/s56DkLb"><img src="https://i.ibb.co/HNxM1mB/Captura-de-tela-de-2019-10-16-23-39-44.png" alt="Captura-de-tela-de-2019-10-16-23-39-44" border="0" width=300></a>
+<a href="https://ibb.co/njx6kK0"><img src="https://i.ibb.co/zZqQft5/Captura-de-tela-de-2019-10-16-23-44-44.png" alt="Captura-de-tela-de-2019-10-16-23-44-44" border="0" width=300></a>
+<a href="https://ibb.co/zbX3WBn"><img src="https://i.ibb.co/CvbjpY1/Captura-de-tela-de-2019-10-16-23-44-54.png" alt="Captura-de-tela-de-2019-10-16-23-44-54" border="0" width=300></a>
+<a href="https://ibb.co/Wpd9nyQ"><img src="https://i.ibb.co/BK7DLZm/Captura-de-tela-de-2019-10-16-23-45-12.png" alt="Captura-de-tela-de-2019-10-16-23-45-12" border="0" width=300></a>
