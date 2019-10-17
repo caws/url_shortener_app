@@ -19,7 +19,7 @@ class DashboardBlocPage extends StatelessWidget {
     // Taking the UrlProvider from the context
     final dashboardProvider = AppProvider.dashboardBlocFrom(context);
     final sessionBloc = AppProvider.sessionBlocFrom(context);
-    final urlBloc = AppProvider.urlBlocFrom(context);
+
     dashboardProvider.getDashboard();
     sessionBloc.getSessionData();
     return Scaffold(
@@ -192,7 +192,6 @@ class DashboardBlocPage extends StatelessWidget {
                                           MaterialPageRoute(
                                               builder: (BuildContext context) =>
                                                   UrlPage(
-                                                      urlBloc: urlBloc,
                                                       url: snapshot.data
                                                           .recentUrls[index])),
                                         );

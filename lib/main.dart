@@ -34,5 +34,6 @@ void main() {
   final sessionBloc = SessionBloc(sessionService);
 
   // Start the app.
-  runApp(ShortenerApp(urlBloc, dashboardBloc, loginBloc, sessionBloc, signupBloc));
+  runApp(
+      ShortenerApp(urlBloc, dashboardBloc, loginBloc, sessionBloc, signupBloc));
 }

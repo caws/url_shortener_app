@@ -16,7 +16,9 @@ class SessionBloc {
   SessionBloc(this._sessionService);
 
   ValueObservable<Authentication> get sessionData => _sessionData.stream;
+
   ValueObservable<bool> get isLogged => _isLogged.stream;
+
   ValueObservable<bool> get isValid => _isValid.stream;
 
   Future isUserLogged() async {
@@ -67,7 +69,6 @@ class SessionBloc {
       _sessionData.addError(e);
     }
   }
-
 
   /// Take care of closing streams.
   void dispose() {

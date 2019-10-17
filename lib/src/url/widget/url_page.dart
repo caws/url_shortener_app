@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
+import 'package:shortener_app/src/app/app_provider.dart';
 import 'package:shortener_app/src/url/url_bloc.dart';
 
 // This class holds the View
 class UrlPage extends StatefulWidget {
   final Url url;
-  final UrlBloc urlBloc;
 
-  UrlPage({this.url, this.urlBloc});
+  UrlPage({this.url});
 
   @override
   _UrlPageState createState() => _UrlPageState();
@@ -24,9 +24,10 @@ class _UrlPageState extends State<UrlPage> {
 
   void _handleDelete(BuildContext context) {
     setLoading(true);
-    widget.urlBloc.delete(widget.url);
+    final urlBloc = AppProvider.urlBlocFrom(context);
+    urlBloc.delete(widget.url);
 
-    widget.urlBloc.url.listen((onData) {
+    urlBloc.url.listen((onData) {
       Navigator.of(context).pop();
     }, onError: (error) {
       setLoading(false);

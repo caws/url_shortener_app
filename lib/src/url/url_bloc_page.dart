@@ -76,7 +76,6 @@ class UrlBlocPage extends StatelessWidget {
                                           builder: (BuildContext context) =>
                                               UrlPage(
                                                 url: snapshot.data[index],
-                                                urlBloc: urlsProvider,
                                               )),
                                     );
                                   },

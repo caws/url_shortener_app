@@ -17,7 +17,9 @@ class LoginBlocPage extends StatefulWidget {
 
 class LoginBlocPageState extends State<LoginBlocPage> {
   bool isLoading = false;
-  HttpErrorWidget errorWidget = HttpErrorWidget(dioError: null,);
+  HttpErrorWidget errorWidget = HttpErrorWidget(
+    dioError: null,
+  );
   TextEditingController _email = new TextEditingController();
   TextEditingController _password = new TextEditingController();
 
@@ -50,9 +52,9 @@ class LoginBlocPageState extends State<LoginBlocPage> {
   }
 
   void _setErrors(DioError e) {
-   setState(() {
-     errorWidget = HttpErrorWidget(dioError: e);
-   });
+    setState(() {
+      errorWidget = HttpErrorWidget(dioError: e);
+    });
   }
 
   void _loading() {
