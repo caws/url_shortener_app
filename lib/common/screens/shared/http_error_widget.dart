@@ -11,7 +11,7 @@ class HttpErrorWidget extends StatelessWidget {
   Widget _errorColumn() {
     List<Text> texts = List();
 
-    (dioError.response.data as LinkedHashMap).entries.forEach((entry){
+    (dioError.response.data as LinkedHashMap).entries.forEach((entry) {
       texts.add(Text("${entry.key} ${entry.value}"));
     });
 
@@ -23,18 +23,18 @@ class HttpErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    if (dioError != null) {
-      if (dioError.response.data != null) {
-        return Center(
-          child: _errorColumn(),
-        );
-      } else {
-        return Center(
-          child: Text(dioError.response.statusMessage),
-        );
-      }
+    if (dioError == null) {
+      return SizedBox();
     }
 
-    return SizedBox();
+    if (dioError.response == null) {
+      return Center(
+        child: Text(dioError.message),
+      );
+    }
+
+    return Center(
+      child: _errorColumn(),
+    );
   }
 }
