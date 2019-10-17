@@ -1,7 +1,8 @@
 # shortener_app
 
 A flutter app that allows you to create short urls and keep track of
-the amount of people who clicked on them.
+the amount of people who clicked on them. This app consumes [this](https://github.com/caws/url_shortener)
+Rails API.
 
 This project uses the BLoC pattern with a little twist.
 
