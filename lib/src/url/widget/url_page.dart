@@ -40,7 +40,7 @@ class _UrlPageState extends State<UrlPage> {
   @override
   Widget build(BuildContext context) {
     Widget _infoLine(String label, String value) {
-      return Row(
+      return Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
@@ -65,6 +65,8 @@ class _UrlPageState extends State<UrlPage> {
               _infoLine("Title", "${widget.url.pageTitle}"),
               SizedBox(height: 5),
               _infoLine("Created At", "${widget.url.createdAt}"),
+              SizedBox(height: 5),
+              _infoLine("Description", "${widget.url.description}"),
             ],
           ));
     }

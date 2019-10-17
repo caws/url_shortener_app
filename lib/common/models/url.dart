@@ -5,6 +5,7 @@ class Url {
   final String pageTitle;
   final int hitCounter;
   final String status;
+  final String description;
   final String createdAt;
 
   Url(
@@ -14,6 +15,7 @@ class Url {
       this.pageTitle,
       this.hitCounter,
       this.status,
+      this.description,
       this.createdAt});
 
   static List<Url> fromJsonArray(List<dynamic> jsonArray) {
@@ -27,7 +29,10 @@ class Url {
   }
 
   Map<String, dynamic> toJson() {
-   return <String, dynamic>{'full_url': this.fullUrl};
+    return <String, dynamic>{
+      'full_url': this.fullUrl,
+      'description': this.description
+    };
   }
 
   Url.fromJson(Map<String, dynamic> json)
@@ -37,6 +42,7 @@ class Url {
         pageTitle = json["page_title"],
         hitCounter = json["hit_counter"],
         status = json["status"],
+        description = json["description"],
         createdAt = json["created_at"];
 
   String urlSample() {

@@ -19,10 +19,14 @@ class _NewUrlPageState extends State<NewUrlPage> {
     dioError: null,
   );
   final TextEditingController controllerFullUrl = new TextEditingController();
+  final TextEditingController controllerDescription =
+      new TextEditingController();
   bool crap = false;
 
   Future _handleSave(UrlBloc urlBloc, BuildContext context) async {
-    await urlBloc.saveUrl(Url(fullUrl: controllerFullUrl.text));
+    await urlBloc.saveUrl(Url(
+        fullUrl: controllerFullUrl.text,
+        description: controllerDescription.text));
 
     final subscription = urlBloc.url.listen(null);
     subscription.onData((handleData) {
@@ -97,6 +101,12 @@ class _NewUrlPageState extends State<NewUrlPage> {
                 controller: controllerFullUrl,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(labelText: "Full URL"),
+              ));
+
+              uiComponents.add(TextFormField(
+                controller: controllerDescription,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(labelText: "Description"),
               ));
 
               return _newUrlForm(snapshot, uiComponents);

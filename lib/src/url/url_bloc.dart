@@ -50,6 +50,7 @@ class UrlBloc {
   Future delete(Url deadUrl) async {
     try {
       await _urlService.delete(deadUrl);
+      _url.sink.add(null);
     } catch (e) {
       _url.addError(e);
     }
