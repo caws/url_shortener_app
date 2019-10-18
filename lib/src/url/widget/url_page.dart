@@ -178,7 +178,8 @@ class _UrlPageState extends State<UrlPage> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      _urlInfo()
+                      _urlInfo(),
+                      SizedBox(height: 90),
                     ]))));
   }
 }

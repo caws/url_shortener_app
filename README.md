@@ -25,6 +25,28 @@ You'll also need to have a backend for this or use this sample backend project.
 The main objective of this project is to have a base project structure
 that I can use for other medium-sized projects.
 
+## What will you find?
+
+BLoC inspired pattern
+
+    The class AppProvider contains references to all the blocs used in the app,
+    this is done so that all blocs can be acessed from anywhere in the app by 
+    requesting them from the context, which allows you to update different
+    screens by listening to the bloc from the context.
+
+Basic session control
+
+    If you don't logout before closing the app, your JWT token remains stored 
+    and will be used the next time you open the app until it is no longer valid. 
+    If you do logout before closing the app, you'll be greeted with the login screen.
+
+Basic API routing
+
+    The Routes class contains the core URL references for a given API, 
+    and other classes can extend it, thus adding more routes to it and allowing
+    routes to be called via a method. 
+    (eg.: yourHttpClient.post(AuthenticationRoutes.login(), authenticationData);). 
+
 ## Screenshots
 
 <a href="https://ibb.co/Cw834XZ"><img src="https://i.ibb.co/b6mMYyZ/Captura-de-tela-de-2019-10-16-23-39-21.png" alt="Captura-de-tela-de-2019-10-16-23-39-21" border="0" width=300></a>

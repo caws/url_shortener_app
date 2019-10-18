@@ -14,10 +14,10 @@ class UrlBloc {
 
   // These are the internal objects whose streams / sinks are provided
   // by this component. See below for what each means.
-  final _urls = BehaviorSubject<List<Url>>(seedValue: []);
+  final _urls = BehaviorSubject<List<Url>>();
 
   final _url = BehaviorSubject<Url>();
-  final _urlsCount = BehaviorSubject<int>(seedValue: 0);
+  final _urlsCount = BehaviorSubject<int>();
 
   UrlBloc(this._urlService);
 

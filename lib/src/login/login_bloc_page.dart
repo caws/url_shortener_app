@@ -35,18 +35,20 @@ class LoginBlocPageState extends State<LoginBlocPage> {
     _setErrors(null);
 
     loginBloc.doLogin(_email.text, _password.text);
-    loginBloc.login.listen((data) async {
-      if (data != null) {
-        _setErrors(null);
-        _notLoading();
+
+    final subscription = loginBloc.login.listen(null);
+    subscription.onData((handleData) async {
+      if (handleData != null) {
+        subscription.cancel();
         final sessionProvider = AppProvider.sessionBlocFrom(context);
-        sessionProvider.setSessionData(data);
+        sessionProvider.setSessionData(handleData);
         await Navigator.pushReplacementNamed(context, DashboardBlocPage.routeName);
-      } else {
-        _notLoading();
       }
-    }, onError: (error) {
-      _setErrors(error);
+    });
+
+    subscription.onError((handleError) {
+      subscription.cancel();
+      _setErrors(handleError);
       _notLoading();
     });
   }
