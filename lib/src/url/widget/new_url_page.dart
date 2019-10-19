@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
 import 'package:shortener_app/common/screens/shared/http_error_widget.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
+import 'package:shortener_app/src/loading/loading_bloc_page.dart';
 import 'package:shortener_app/src/url/url_bloc.dart';
 
 // This class holds the View
@@ -21,7 +22,6 @@ class _NewUrlPageState extends State<NewUrlPage> {
   final TextEditingController controllerFullUrl = new TextEditingController();
   final TextEditingController controllerDescription =
       new TextEditingController();
-  bool crap = false;
 
   Future _handleSave(UrlBloc urlBloc, BuildContext context) async {
     await urlBloc.saveUrl(Url(

@@ -5,6 +5,8 @@ import 'package:shortener_app/common/services/session.dart';
 import 'package:shortener_app/common/services/signup.dart';
 import 'package:shortener_app/common/services/url.dart';
 import 'package:shortener_app/src/dashboard/dashboard_bloc.dart';
+import 'package:shortener_app/src/error/error_bloc.dart';
+import 'package:shortener_app/src/loading/loading_bloc.dart';
 import 'package:shortener_app/src/login/login_bloc.dart';
 import 'package:shortener_app/src/session/session_bloc.dart';
 import 'package:shortener_app/src/signup/signup_bloc.dart';
@@ -16,6 +18,8 @@ class AppProvider extends InheritedWidget {
   final UrlBloc urlBloc;
   final LoginBloc loginBloc;
   final SignUpBloc signUpBloc;
+  final LoadingBloc loadingBloc;
+  final ErrorBloc errorBloc;
 
   AppProvider({
     SessionService sessionService,
@@ -29,12 +33,17 @@ class AppProvider extends InheritedWidget {
     UrlBloc urlBloc,
     LoginBloc loginBloc,
     SignUpBloc signUpBloc,
+    LoadingBloc loadingBloc,
+    ErrorBloc errorBloc,
     Widget child,
   })  : sessionBloc = sessionBloc ?? SessionBloc(sessionService),
-        dashboardBloc = dashboardBloc ?? DashboardBloc(dashboardService),
+        dashboardBloc =
+            dashboardBloc ?? DashboardBloc(dashboardService),
         urlBloc = urlBloc ?? UrlBloc(urlService),
         loginBloc = loginBloc ?? LoginBloc(loginService),
         signUpBloc = signUpBloc ?? SignUpBloc(signupService),
+        loadingBloc = loadingBloc ?? LoadingBloc(),
+        errorBloc = errorBloc ?? ErrorBloc(),
         super(key: key, child: child);
 
   @override
@@ -59,4 +68,12 @@ class AppProvider extends InheritedWidget {
   static SignUpBloc signupBlocFrom(BuildContext context) =>
       (context.inheritFromWidgetOfExactType(AppProvider) as AppProvider)
           .signUpBloc;
+
+  static LoadingBloc loadingBlocFrom(BuildContext context) =>
+      (context.inheritFromWidgetOfExactType(AppProvider) as AppProvider)
+          .loadingBloc;
+
+  static ErrorBloc errorBlocFrom(BuildContext context) =>
+      (context.inheritFromWidgetOfExactType(AppProvider) as AppProvider)
+          .errorBloc;
 }

@@ -3,8 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/screens/shared/http_error_widget.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
+import 'package:shortener_app/src/error/error_bloc_page.dart';
+import 'package:shortener_app/src/loading/loading_bloc_page.dart';
 import 'package:shortener_app/src/login/login_bloc_page.dart';
 import 'package:shortener_app/src/signup/signup_bloc.dart';
+import 'package:shortener_app/src/signup/signup_logic.dart';
 
 class SignupBlocPage extends StatefulWidget {
   static const routeName = "/signup";
@@ -14,10 +17,6 @@ class SignupBlocPage extends StatefulWidget {
 }
 
 class SignupBlocPageState extends State<SignupBlocPage> {
-  bool isLoading = false;
-  HttpErrorWidget errorWidget = HttpErrorWidget(
-    dioError: null,
-  );
   TextEditingController _name = new TextEditingController();
   TextEditingController _email = new TextEditingController();
   TextEditingController _password = new TextEditingController();
@@ -29,59 +28,9 @@ class SignupBlocPageState extends State<SignupBlocPage> {
     }
   }
 
-  Future _handleLogin(BuildContext context, SignUpBloc signupBloc) async {
-    _loading();
-    _setErrors(null);
-
-    signupBloc.signUp(_name.text, _email.text, _password.text);
-    signupBloc.signup.listen((data) {
-      if (data != null) {
-        Navigator.pushNamed(context, LoginBlocPage.routeName);
-      } else {
-        _notLoading();
-      }
-    }, onError: (error) {
-      _setErrors(error);
-      _notLoading();
-    });
-  }
-
-  void _setErrors(DioError e) {
-    setState(() {
-      errorWidget = HttpErrorWidget(dioError: e);
-    });
-  }
-
-  void _loading() {
-    setState(() {
-      isLoading = true;
-    });
-  }
-
-  void _notLoading() {
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  Widget _loadingSpinner() {
-    if (isLoading) {
-      return Column(
-        children: <Widget>[
-          CircularProgressIndicator(
-            backgroundColor: Colors.cyan,
-          ),
-          Text("Loading...")
-        ],
-      );
-    }
-
-    return SizedBox();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final signupBloc = AppProvider.signupBlocFrom(context);
+    final signupLogic = SignupLogic(context);
 
     final logo = Hero(
       tag: 'hero',
@@ -142,11 +91,17 @@ class SignupBlocPageState extends State<SignupBlocPage> {
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () async {
-          _handleLogin(context, signupBloc);
+          signupLogic.handleLogin(_name.text, _email.text, _password.text);
         },
         padding: EdgeInsets.all(12),
         color: Colors.lightBlueAccent,
-        child: Text('Sign Up', style: TextStyle(color: Colors.white)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            LoadingBlocPage(),
+            Text('SignUp', style: TextStyle(color: Colors.white))
+          ],
+        ),
       ),
     );
 
@@ -159,8 +114,7 @@ class SignupBlocPageState extends State<SignupBlocPage> {
           children: <Widget>[
             logo,
             SizedBox(height: 48.0),
-            _loadingSpinner(),
-            errorWidget,
+            ErrorBlocPage(),
             SizedBox(height: 8.0),
             name,
             SizedBox(height: 8.0),

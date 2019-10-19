@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
-import 'package:shortener_app/src/url/url_bloc.dart';
+import 'package:shortener_app/src/loading/loading_bloc_page.dart';
 
 // This class holds the View
 class UrlPage extends StatefulWidget {

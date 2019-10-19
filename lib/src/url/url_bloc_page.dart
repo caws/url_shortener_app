@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
+import 'package:shortener_app/src/loading/loading_bloc_page.dart';
 import 'package:shortener_app/src/url/widget/new_url_page.dart';
 import 'package:shortener_app/src/url/widget/url_page.dart';
 
 // This class holds the View
 class UrlBlocPage extends StatelessWidget {
   static const routeName = "/urls";
+  Future _deleteUrl(BuildContext context, Url url) async {
+    final urlsProvider = AppProvider.urlBlocFrom(context);
+    await urlsProvider.delete(url);
+    await urlsProvider.getUrls();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,9 +104,7 @@ class UrlBlocPage extends StatelessWidget {
                                               color: Colors.red,
                                               icon: Icon(Icons.delete),
                                               onPressed: () async {
-                                                await urlsProvider.delete(
-                                                    snapshot.data[index]);
-                                                await urlsProvider.getUrls();
+                                                _deleteUrl(context, snapshot.data[index]);
                                               },
                                             ),
                                             subtitle: Column(

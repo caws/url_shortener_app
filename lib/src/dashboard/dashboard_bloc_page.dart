@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/authentication.dart';
 import 'package:shortener_app/common/models/dashboard.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
+import 'package:shortener_app/src/error/error_bloc_page.dart';
+import 'package:shortener_app/src/loading/loading_bloc_page.dart';
 import 'package:shortener_app/src/login/login_bloc_page.dart';
 import 'package:shortener_app/src/url/url_bloc_page.dart';
 import 'package:shortener_app/src/url/widget/new_url_page.dart';
@@ -26,14 +28,6 @@ class DashboardBlocPage extends StatelessWidget {
       body: StreamBuilder<Dashboard>(
           stream: dashboardProvider.dashboard,
           builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-
-            if (snapshot.data == null) {
-              return Text('No data');
-            }
-
             return Scaffold(
               body: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -67,173 +61,185 @@ class DashboardBlocPage extends StatelessWidget {
                             );
                           }),
                       SizedBox(height: 20),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
+                      snapshot.data == null || snapshot.hasError == true
+                          ? Column(
                         children: <Widget>[
-                          FlatButton(
-                            child: Icon(
-                              Icons.view_list,
-                              color: Colors.white,
-                            ),
-                            color: Theme.of(context).accentColor,
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, UrlBlocPage.routeName);
-                            },
-                          ),
-                          SizedBox(width: 10),
-                          FlatButton(
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            color: Colors.cyan,
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, NewUrlPage.routeName);
-                            },
-                          ),
-                          SizedBox(width: 10),
-                          FlatButton(
-                            child: Icon(
-                              Icons.exit_to_app,
-                              color: Colors.white,
-                            ),
-                            color: Colors.red,
-                            onPressed: () async {
-                              final sessionBloc =
-                                  AppProvider.sessionBlocFrom(context);
-                              await sessionBloc.discardSessionData();
-
-                              Navigator.pushReplacementNamed(
-                                  context, LoginBlocPage.routeName);
-                            },
-                          ),
+                          LoadingBlocPage(),
+                          ErrorBlocPage(),
+                          Text("No Data")
                         ],
-                      ),
-                      SizedBox(height: 40),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 50),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Column(
+                      )
+                          : Column(
+                        children: <Widget>[
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              FlatButton(
+                                child: Icon(
+                                  Icons.view_list,
+                                  color: Colors.white,
+                                ),
+                                color: Theme.of(context).accentColor,
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, UrlBlocPage.routeName);
+                                },
+                              ),
+                              SizedBox(width: 10),
+                              FlatButton(
+                                child: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                                color: Colors.cyan,
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, NewUrlPage.routeName);
+                                },
+                              ),
+                              SizedBox(width: 10),
+                              FlatButton(
+                                child: Icon(
+                                  Icons.exit_to_app,
+                                  color: Colors.white,
+                                ),
+                                color: Colors.red,
+                                onPressed: () async {
+                                  final sessionBloc =
+                                  AppProvider.sessionBlocFrom(context);
+                                  await sessionBloc.discardSessionData();
+
+                                  Navigator.pushReplacementNamed(
+                                      context, LoginBlocPage.routeName);
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 40),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 50),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text(
-                                  "${snapshot.data.totalHits}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 22,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Total Hits",
-                                  style: TextStyle(),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Text(
-                                  "${snapshot.data.numberOfUrls}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 22,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  "Url(s)",
-                                  style: TextStyle(),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        'Popular Urls',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                      SizedBox(height: 3),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        primary: false,
-                        padding: EdgeInsets.all(0),
-                        itemCount: snapshot.data.recentUrls.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: EdgeInsets.all(0.0),
-                            child: Container(
-                              child: Card(
-                                elevation: 3.0,
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 0.0),
-                                  child: ListTile(
-                                    leading: Text(
-                                      "${snapshot.data.recentUrls[index].shortUrl}",
+                                Column(
+                                  children: <Widget>[
+                                    Text(
+                                      "${snapshot.data.totalHits}",
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22,
+                                      ),
                                     ),
-                                    title: Text(
-                                        "${snapshot.data.recentUrls[index].urlSample()}"),
-                                    trailing: IconButton(
-                                      color: Colors.blueAccent,
-                                      icon: Icon(Icons.search),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  UrlPage(
-                                                      url: snapshot.data
-                                                          .recentUrls[index])),
-                                        );
-                                      },
+                                    SizedBox(height: 4),
+                                    Text(
+                                      "Total Hits",
+                                      style: TextStyle(),
                                     ),
-                                    subtitle: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
+                                  ],
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    Text(
+                                      "${snapshot.data.numberOfUrls}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      "Url(s)",
+                                      style: TextStyle(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'Popular Urls',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          SizedBox(height: 3),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            primary: false,
+                            padding: EdgeInsets.all(0),
+                            itemCount: snapshot.data.recentUrls.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: EdgeInsets.all(0.0),
+                                child: Container(
+                                  child: Card(
+                                    elevation: 3.0,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 0.0),
+                                      child: ListTile(
+                                        leading: Text(
+                                          "${snapshot.data.recentUrls[index].shortUrl}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        title: Text(
+                                            "${snapshot.data.recentUrls[index].urlSample()}"),
+                                        trailing: IconButton(
+                                          color: Colors.blueAccent,
+                                          icon: Icon(Icons.search),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (BuildContext context) =>
+                                                      UrlPage(
+                                                          url: snapshot.data
+                                                              .recentUrls[index])),
+                                            );
+                                          },
+                                        ),
+                                        subtitle: Column(
                                           children: <Widget>[
-                                            Text(
-                                              "Hits:",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                              children: <Widget>[
+                                                Text(
+                                                  "Hits:",
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                                Text(
+                                                    "${snapshot.data.recentUrls[index].hitCounter}")
+                                              ],
                                             ),
-                                            Text(
-                                                "${snapshot.data.recentUrls[index].hitCounter}")
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                              children: <Widget>[
+                                                Text(
+                                                  "Status:",
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                                Text(
+                                                    "${snapshot.data.recentUrls[index].status}")
+                                              ],
+                                            )
                                           ],
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: <Widget>[
-                                            Text(
-                                              "Status:",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                                "${snapshot.data.recentUrls[index].status}")
-                                          ],
-                                        )
-                                      ],
+                                        isThreeLine: true,
+                                      ),
                                     ),
-                                    isThreeLine: true,
                                   ),
                                 ),
-                              ),
-                            ),
-                          );
-                        },
+                              );
+                            },
+                          )
+                        ],
                       ),
                     ],
                   ),

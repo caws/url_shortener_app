@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:shortener_app/common/models/dashboard.dart';
 import 'package:shortener_app/common/services/dashboard.dart';
+import 'package:shortener_app/src/loading/loading_bloc.dart';
 
 /// This component encapsulates the logic of fetching products from
 /// a database, page by page, according to position in an infinite list.
