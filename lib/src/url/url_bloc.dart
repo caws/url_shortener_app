@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:shortener_app/common/models/url.dart';
 import 'package:shortener_app/common/services/url.dart';
+import 'package:shortener_app/src/app/app_bloc.dart';
 
 /// This component encapsulates the logic of fetching products from
 /// a database, page by page, according to position in an infinite list.
 ///
 /// Only the data that are close to the current location are cached, the rest
 /// are thrown away.
-class UrlBloc {
+class UrlBloc extends AppBloc{
   final UrlService _urlService;
 
   // These are the internal objects whose streams / sinks are provided
@@ -28,31 +29,44 @@ class UrlBloc {
   ValueObservable<int> get urlsCount => _urlsCount.stream;
 
   Future getUrls() async {
+    _cleanUp();
     try {
+      super.isLoading();
       final urls = await _urlService.requestAll();
       _urls.sink.add(urls);
       _urlsCount.sink.add(urls.length);
+      super.isNotLoading();
     } catch (e) {
       _urls.addError(e);
+      super.setError(e);
+      super.isNotLoading();
     }
   }
 
   Future saveUrl(Url newUrl) async {
     try {
+      super.isLoading();
       _url.sink.add(null);
       final url = await _urlService.save(newUrl);
       _url.sink.add(url);
+      super.isNotLoading();
     } catch (e) {
       _url.sink.addError(e);
+      super.setError(e);
+      super.isNotLoading();
     }
   }
 
   Future delete(Url deadUrl) async {
     try {
+      super.isLoading();
       await _urlService.delete(deadUrl);
       _url.sink.add(null);
+      super.isNotLoading();
     } catch (e) {
       _url.addError(e);
+      super.setError(e);
+      super.isNotLoading();
     }
   }
 
@@ -61,11 +75,21 @@ class UrlBloc {
   // to the sink.
   Future getUrl(int urlId) async {
     try {
+      super.isLoading();
       final url = await _urlService.requestById(urlId);
       _url.sink.add(url);
+      super.isNotLoading();
     } catch (e) {
       _url.addError(e);
+      super.setError(e);
+      super.isNotLoading();
     }
+  }
+
+  void _cleanUp() {
+    _urls.sink.add(null);
+    _url.sink.add(null);
+    super.cleanUp();
   }
 
   /// Take care of closing streams.
@@ -73,5 +97,6 @@ class UrlBloc {
     _url.close();
     _urls.close();
     _urlsCount.close();
+    super.dispose();
   }
 }

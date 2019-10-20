@@ -1,12 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shortener_app/common/screens/shared/http_error_widget.dart';
+import 'package:shortener_app/common/screens/shared/error_widget.dart';
+import 'package:shortener_app/common/screens/shared/loading_widget.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
-import 'package:shortener_app/src/error/error_bloc_page.dart';
-import 'package:shortener_app/src/loading/loading_bloc_page.dart';
-import 'package:shortener_app/src/login/login_bloc_page.dart';
-import 'package:shortener_app/src/signup/signup_bloc.dart';
 import 'package:shortener_app/src/signup/signup_logic.dart';
 
 class SignupBlocPage extends StatefulWidget {
@@ -30,6 +26,7 @@ class SignupBlocPageState extends State<SignupBlocPage> {
 
   @override
   Widget build(BuildContext context) {
+    final signupBloc = AppProvider.signupBlocFrom(context);
     final signupLogic = SignupLogic(context);
 
     final logo = Hero(
@@ -98,7 +95,9 @@ class SignupBlocPageState extends State<SignupBlocPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            LoadingBlocPage(),
+            LoadingWidget(
+              loading: signupBloc.loading,
+            ),
             Text('SignUp', style: TextStyle(color: Colors.white))
           ],
         ),
@@ -114,7 +113,9 @@ class SignupBlocPageState extends State<SignupBlocPage> {
           children: <Widget>[
             logo,
             SizedBox(height: 48.0),
-            ErrorBlocPage(),
+            CustomErrorWidget(
+              error: signupBloc.error,
+            ),
             SizedBox(height: 8.0),
             name,
             SizedBox(height: 8.0),

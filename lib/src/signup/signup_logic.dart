@@ -12,12 +12,7 @@ class SignupLogic {
   Future handleLogin(String name, email, password) async {
     FocusScope.of(context).requestFocus(FocusNode());
 
-    final errorBloc = AppProvider.errorBlocFrom(context);
-    final loadingBloc = AppProvider.loadingBlocFrom(context);
     final signupBloc = AppProvider.signupBlocFrom(context);
-    loadingBloc.setLoading();
-
-    errorBloc.setError(null);
 
     signupBloc.signUp(name, email, password);
 
@@ -26,15 +21,12 @@ class SignupLogic {
     subscription.onData((handleData) async {
       if (handleData != null) {
         subscription.cancel();
-        loadingBloc.setNotLoading();
         Navigator.pushNamed(context, LoginBlocPage.routeName);
       }
     });
 
     subscription.onError((handleError) {
       subscription.cancel();
-      errorBloc.setError(handleError);
-      loadingBloc.setNotLoading();
     });
   }
 }

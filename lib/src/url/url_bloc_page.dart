@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
+import 'package:shortener_app/common/screens/shared/error_widget.dart';
+import 'package:shortener_app/common/screens/shared/loading_widget.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
-import 'package:shortener_app/src/loading/loading_bloc_page.dart';
 import 'package:shortener_app/src/url/widget/new_url_page.dart';
 import 'package:shortener_app/src/url/widget/url_page.dart';
 
@@ -63,9 +64,12 @@ class UrlBlocPage extends StatelessWidget {
                           fontSize: 20,
                         ),
                       ),
+                      CustomErrorWidget(error: urlsProvider.error,),
+                      SizedBox(height: 15),
+                      LoadingWidget(loading: urlsProvider.loading,height: 30,width: 30,),
                       SizedBox(height: 3),
                       snapshot.data == null || snapshot.hasError == true
-                          ? Text("No Data")
+                          ? Container()
                           : ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),

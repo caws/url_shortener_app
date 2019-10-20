@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shortener_app/common/models/url.dart';
 import 'package:shortener_app/common/screens/shared/http_error_widget.dart';
 import 'package:shortener_app/src/app/app_provider.dart';
-import 'package:shortener_app/src/loading/loading_bloc_page.dart';
 import 'package:shortener_app/src/url/url_bloc.dart';
 
 // This class holds the View

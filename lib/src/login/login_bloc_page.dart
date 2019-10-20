@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shortener_app/src/error/error_bloc_page.dart';
-import 'package:shortener_app/src/loading/loading_bloc_page.dart';
+import 'package:shortener_app/common/screens/shared/error_widget.dart';
+import 'package:shortener_app/common/screens/shared/loading_widget.dart';
+import 'package:shortener_app/src/app/app_provider.dart';
 import 'package:shortener_app/src/login/login_logic.dart';
 import 'package:shortener_app/src/signup/signup_bloc_page.dart';
 
@@ -18,6 +19,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
 
   @override
   Widget build(BuildContext context) {
+    final loginBLoc = AppProvider.loginBlocFrom(context);
     final loginLogic = LoginLogic(context);
 
     final logo = Hero(
@@ -75,7 +77,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            LoadingBlocPage(),
+            LoadingWidget(loading: loginBLoc.loading,),
             Text('Log In', style: TextStyle(color: Colors.white))
           ],
         ),
@@ -91,7 +93,7 @@ class LoginBlocPageState extends State<LoginBlocPage> {
           children: <Widget>[
             logo,
             SizedBox(height: 48.0),
-            ErrorBlocPage(),
+            CustomErrorWidget(error: loginBLoc.error),
             SizedBox(height: 8.0),
             email,
             SizedBox(height: 8.0),
