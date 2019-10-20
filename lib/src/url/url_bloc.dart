@@ -44,6 +44,7 @@ class UrlBloc extends AppBloc{
   }
 
   Future saveUrl(Url newUrl) async {
+    _cleanUp();
     try {
       super.isLoading();
       _url.sink.add(null);
@@ -58,6 +59,7 @@ class UrlBloc extends AppBloc{
   }
 
   Future delete(Url deadUrl) async {
+    _cleanUp();
     try {
       super.isLoading();
       await _urlService.delete(deadUrl);
@@ -74,6 +76,7 @@ class UrlBloc extends AppBloc{
   // unexpected happens, add exception
   // to the sink.
   Future getUrl(int urlId) async {
+    _cleanUp();
     try {
       super.isLoading();
       final url = await _urlService.requestById(urlId);

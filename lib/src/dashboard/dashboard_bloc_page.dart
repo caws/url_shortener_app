@@ -122,7 +122,9 @@ class DashboardBlocPage extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 40),
+                                SizedBox(height: 20),
+                                CustomErrorWidget(error: dashboardBloc.error,),
+                                LoadingWidget(loading: dashboardBloc.loading,height: 30,width: 30,),
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 50),
                                   child: Row(

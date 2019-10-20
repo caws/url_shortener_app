@@ -16,11 +16,6 @@ class SignUpBloc extends AppBloc {
 
   ValueObservable<User> get signup => _signUp.stream;
 
-  void _cleanUp() {
-    _signUp.sink.add(null);
-    super.cleanUp();
-  }
-
   Future signUp(String name, email, password) async {
     _cleanUp();
 
@@ -37,6 +32,11 @@ class SignUpBloc extends AppBloc {
       super.setError(e);
       super.isNotLoading();
     }
+  }
+
+  void _cleanUp() {
+    _signUp.sink.add(null);
+    super.cleanUp();
   }
 
   /// Take care of closing streams.

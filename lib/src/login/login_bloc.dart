@@ -17,7 +17,7 @@ class LoginBloc extends AppBloc {
   ValueObservable<Authentication> get login => _login.stream;
 
   Future doLogin(String email, String password) async {
-    cleanUp();
+    _cleanUp();
     try {
       super.isLoading();
       final login = await _loginService.login(email, password);
@@ -30,7 +30,7 @@ class LoginBloc extends AppBloc {
     }
   }
 
-  void _cleanUp() {
+  Future _cleanUp() async {
     _login.sink.add(null);
     super.cleanUp();
   }
